@@ -14,6 +14,7 @@ import Footer from "./components/Footer/Footer";
 // Auth Components
 import SignIn from "./components/Auth/SignIn";
 import SignUp from "./components/Auth/SignUp";
+import UserInfoForm from "./components/Auth/UserInfoForm";
 
 // Patient Components
 import PatientDashboard from "./components/Patient/PatientDashboard";
@@ -31,40 +32,51 @@ import NotFound from "./components/NotFound/NotFound";
 // Home Component
 import HomePage from "./components/HomePage/HomePage";
 
+/**
+ * ProtectedRoute Component
+ *
+ * This component ensures that only authenticated users with the correct role
+ * can access specific routes. If the user is not authenticated or has the wrong
+ * role, they will be redirected to the home page.
+ */
+const ProtectedRoute = ({ children, requiredRole }) => {
+  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+  const userRole = localStorage.getItem("userRole");
+
+  if (!isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (requiredRole && userRole !== requiredRole) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};
+
 const App = () => {
-  // This would be replaced with actual auth state management
-  const [isAuthenticated] = useState(false);
-  const [userRole] = useState(null);
-
-  // Protected Route Component
-  const ProtectedRoute = ({ children, allowedRoles }) => {
-    if (!isAuthenticated) {
-      return <Navigate to="/signin" />;
-    }
-
-    if (allowedRoles && !allowedRoles.includes(userRole)) {
-      return <Navigate to="/" />;
-    }
-
-    return children;
-  };
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    localStorage.getItem("isAuthenticated") === "true"
+  );
+  const [userRole, setUserRole] = useState(localStorage.getItem("userRole"));
 
   return (
     <Router>
       <div className="App">
-        <Header />
+        <Header isAuthenticated={isAuthenticated} userRole={userRole} />
         <main className="main-content">
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<HomePage />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/complete-profile" element={<UserInfoForm />} />
 
             {/* Patient Routes */}
             <Route
               path="/patient/dashboard"
               element={
-                // <ProtectedRoute allowedRoles={["patient"]}>
+                // <ProtectedRoute requiredRole="patient">
                 // </ProtectedRoute>
                 <PatientDashboard />
               }
@@ -72,7 +84,7 @@ const App = () => {
             <Route
               path="/patient/monitor"
               element={
-                // <ProtectedRoute allowedRoles={["patient"]}>
+                // <ProtectedRoute requiredRole="patient">
                 // </ProtectedRoute>
                 <FallDetection />
               }
@@ -80,22 +92,31 @@ const App = () => {
             <Route
               path="/patient/chat"
               element={
-                // <ProtectedRoute allowedRoles={["patient"]}>
+                // <ProtectedRoute requiredRole="patient">
                 // </ProtectedRoute>
                 <ChatPage />
               }
             />
 
             {/* Coming Soon Routes */}
-            <Route path="/patient/voice" element={<ComingSoon feature="voice" />} />
-            <Route path="/patient/contacts" element={<ComingSoon feature="contacts" />} />
-            <Route path="/patient/medications" element={<ComingSoon feature="medications" />} />
+            <Route
+              path="/patient/voice"
+              element={<ComingSoon feature="voice" />}
+            />
+            <Route
+              path="/patient/contacts"
+              element={<ComingSoon feature="contacts" />}
+            />
+            <Route
+              path="/patient/medications"
+              element={<ComingSoon feature="medications" />}
+            />
 
             {/* Staff Routes */}
             <Route
               path="/staff/dashboard"
               element={
-                // <ProtectedRoute allowedRoles={["staff", "admin"]}>
+                // <ProtectedRoute requiredRole="staff">
                 // </ProtectedRoute>
                 <StaffDashboard />
               }

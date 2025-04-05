@@ -1,184 +1,124 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import './Auth.css';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import "./Auth.css";
 
+/**
+ * SignUp Component
+ *
+ * This component has been modified to only allow Google authentication.
+ * All other authentication methods (email/password) have been removed.
+ * After successful Google authentication, the user will be redirected to
+ * the UserInfoForm component to complete their profile.
+ */
 const SignUp = () => {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    role: 'patient',
-    agreeToTerms: false
-  });
+  const navigate = useNavigate();
+  const { loginWithGoogle, isAuthenticated } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === 'checkbox' ? checked : value
-    });
+  /**
+   * Handle Google Sign Up
+   *
+   * This function initiates the Google authentication flow.
+   * It uses the loginWithGoogle method from the AuthContext.
+   */
+  const handleGoogleSignUp = async () => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      // Use the loginWithGoogle method from the AuthContext
+      loginWithGoogle();
+      
+      // Note: The actual redirect happens in the loginWithGoogle method,
+      // so the code below won't execute until the user returns from Google auth
+    } catch (err) {
+      console.error("Google sign-up error:", err);
+      setError("Failed to sign up with Google. Please try again.");
+      setIsLoading(false);
+    }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle sign up logic here
-    console.log('Sign up with:', formData);
-  };
+  // If the user is already authenticated, redirect to the appropriate dashboard
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      const userRole = localStorage.getItem('userRole');
+      if (userRole === 'patient') {
+        navigate('/patient/dashboard');
+      } else if (userRole === 'nurse') {
+        navigate('/staff/dashboard');
+      } else {
+        // If the user doesn't have a role yet, redirect to the user info form
+        navigate('/complete-profile');
+      }
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <div className="auth-container">
       <div className="auth-card">
         <h1 className="auth-title">Create Your Account</h1>
-        <p className="auth-subtitle">Join FallGuardian for enhanced safety and care</p>
-        
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="firstName" className="form-label">First Name</label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                className="form-input"
-                placeholder="Enter your first name"
-                required
-                aria-required="true"
-                aria-label="First Name"
-              />
-            </div>
-            
-            <div className="form-group">
-              <label htmlFor="lastName" className="form-label">Last Name</label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                className="form-input"
-                placeholder="Enter your last name"
-                required
-                aria-required="true"
-                aria-label="Last Name"
-              />
-            </div>
+        <p className="auth-subtitle">
+          Join FallGuardian for enhanced safety and care
+        </p>
+
+        {error && (
+          <div className="error-message" role="alert">
+            {error}
           </div>
-          
-          <div className="form-group">
-            <label htmlFor="email" className="form-label">Email Address</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="form-input"
-              placeholder="Enter your email"
-              required
-              aria-required="true"
-              aria-label="Email Address"
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="password" className="form-label">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="form-input"
-              placeholder="Create a password"
-              required
-              aria-required="true"
-              aria-label="Password"
-            />
-            <p className="form-help">Password must be at least 8 characters long</p>
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className="form-input"
-              placeholder="Confirm your password"
-              required
-              aria-required="true"
-              aria-label="Confirm Password"
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="role" className="form-label">I am a:</label>
-            <div className="role-selector">
-              <div className="role-option">
-                <input
-                  type="radio"
-                  id="patient"
-                  name="role"
-                  value="patient"
-                  checked={formData.role === 'patient'}
-                  onChange={handleChange}
-                  aria-label="Patient"
+        )}
+
+        <div className="auth-form">
+          <div className="google-signin-container">
+            <button
+              onClick={handleGoogleSignUp}
+              className="google-signin-button"
+              disabled={isLoading}
+              aria-label={isLoading ? "Signing up..." : "Sign up with Google"}
+            >
+              <svg
+                className="google-icon"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 533.5 544.3"
+                width="24"
+                height="24"
+              >
+                <path
+                  fill="#4285F4"
+                  d="M533.5 278.4c0-17.5-1.4-34.1-4.1-50.2H272v95h146.9c-6.3 33.7-25 62.3-53.3 81.3v67h85.9c50.2-46.3 81-114.6 81-193.1z"
                 />
-                <label htmlFor="patient" className="role-label">
-                  <span className="role-icon">👤</span>
-                  <span>Patient</span>
-                </label>
-              </div>
-              
-              <div className="role-option">
-                <input
-                  type="radio"
-                  id="nurse"
-                  name="role"
-                  value="nurse"
-                  checked={formData.role === 'nurse'}
-                  onChange={handleChange}
-                  aria-label="Nurse"
+                <path
+                  fill="#34A853"
+                  d="M272 544.3c72.6 0 133.5-24.1 178-65.5l-85.9-67c-23.8 15.9-54.2 25.4-92.1 25.4-70.7 0-130.5-47.8-151.9-112.1h-89.6v70.5c44.4 87.3 135 148.7 241.5 148.7z"
                 />
-                <label htmlFor="nurse" className="role-label">
-                  <span className="role-icon">👩‍⚕️</span>
-                  <span>Nurse</span>
-                </label>
-              </div>
-            </div>
+                <path
+                  fill="#FBBC04"
+                  d="M120.1 324.8c-10.2-30.3-10.2-62.8 0-93.1v-70.5H30.5c-39.6 77.9-39.6 168.3 0 246.2l89.6-70.5z"
+                />
+                <path
+                  fill="#EA4335"
+                  d="M272 107.7c39.6-.6 77.5 13.6 106.5 39.3l79.4-79.4C409.9 23.1 344.1-1.5 272 0 165.5 0 74.9 61.4 30.5 148.7l89.6 70.5C141.5 155.5 201.3 107.7 272 107.7z"
+                />
+              </svg>
+              <span>{isLoading ? "Signing up..." : "Sign up with Google"}</span>
+            </button>
           </div>
-          
-          <div className="form-group checkbox-group">
-            <input
-              type="checkbox"
-              id="agreeToTerms"
-              name="agreeToTerms"
-              checked={formData.agreeToTerms}
-              onChange={handleChange}
-              required
-              aria-required="true"
-              aria-label="Agree to terms and conditions"
-            />
-            <label htmlFor="agreeToTerms" className="checkbox-label">
-              I agree to the <Link to="/terms" className="inline-link">Terms of Service</Link> and <Link to="/privacy" className="inline-link">Privacy Policy</Link>
-            </label>
+
+          <div className="auth-divider">
+            <span>or</span>
           </div>
-          
-          <button type="submit" className="auth-button">Create Account</button>
-          
+
           <div className="auth-links">
-            <Link to="/signin" className="auth-link">Already have an account? Sign In</Link>
+            <Link to="/signin" className="auth-link">
+              Already have an account? Sign In
+            </Link>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
 };
 
-export default SignUp; 
+export default SignUp;
