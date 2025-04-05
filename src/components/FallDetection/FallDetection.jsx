@@ -11,6 +11,45 @@ import { detectFall, logPoseMetrics } from "./fallDetectionUtils";
 // Initialize TensorFlow.js backend
 tf.setBackend("webgl");
 
+const StatusContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Header = styled.h2`
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  color: #809bce;
+  font-weight: 700;
+  text-align: center;
+`;
+
+const NurseInfo = styled.div`
+  border-left: 3px solid #58b38e;
+  padding: 15px;
+  margin: 0 auto 20px;
+  background-color: rgba(184, 224, 210, 0.2);
+  border-radius: 0 4px 4px 0;
+  max-width: 600px;
+  text-align: center;
+  
+  h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #809bce;
+    text-align: center;
+  }
+  
+  p {
+    font-size: 0.95rem;
+    margin: 0;
+    color: #555;
+  }
+`;
+
 const FallDetection = ({ nurseName, nurseMessage }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -171,31 +210,29 @@ const FallDetection = ({ nurseName, nurseMessage }) => {
       "rightHip",
       "nose",
     ];
-    let keypointsDrawn = 0;
-
+    
     keypoints.forEach((keypoint) => {
       if (keypoint.score > 0.3) {
-        keypointsDrawn++;
         const { x, y } = keypoint.position;
 
         ctx.beginPath();
         if (fallDetectionPoints.includes(keypoint.part)) {
           ctx.arc(x, y, 8, 0, 2 * Math.PI);
           ctx.fillStyle = keypoint.part.includes("Shoulder")
-            ? "#FF0000"
+            ? "#809bce" // Blue for shoulders
             : keypoint.part.includes("Hip")
-            ? "#00FFFF"
-            : "#FFFF00";
+            ? "#58b38e" // Green for hips
+            : "#c6def1"; // Light blue for nose
         } else {
           ctx.arc(x, y, 5, 0, 2 * Math.PI);
-          ctx.fillStyle = "#FF0000";
+          ctx.fillStyle = "#809bce"; // Blue for other points
         }
         ctx.fill();
 
         if (fallDetectionPoints.includes(keypoint.part)) {
           ctx.font = "12px Arial";
           ctx.fillStyle = "white";
-          ctx.strokeStyle = "black";
+          ctx.strokeStyle = "#333";
           ctx.lineWidth = 2;
           ctx.strokeText(keypoint.part, x + 10, y);
           ctx.fillText(keypoint.part, x + 10, y);
@@ -229,7 +266,7 @@ const FallDetection = ({ nurseName, nurseMessage }) => {
       keypointMap[keypoint.part] = keypoint;
     });
 
-    let connectionsDrawn = 0;
+    
     adjacentKeyPoints.forEach(([first, second]) => {
       const firstKeypoint = keypointMap[first];
       const secondKeypoint = keypointMap[second];
@@ -243,10 +280,9 @@ const FallDetection = ({ nurseName, nurseMessage }) => {
         ctx.beginPath();
         ctx.moveTo(firstKeypoint.position.x, firstKeypoint.position.y);
         ctx.lineTo(secondKeypoint.position.x, secondKeypoint.position.y);
-        ctx.strokeStyle = "#00FF00";
+        ctx.strokeStyle = "#a2d9c0"; // Light green for skeleton lines
         ctx.lineWidth = 2;
         ctx.stroke();
-        connectionsDrawn++;
       }
     });
   };
@@ -409,28 +445,36 @@ const FallDetection = ({ nurseName, nurseMessage }) => {
   }, []);
 
   return (
-    <div>
-      <h1>Fall Detection Monitor</h1>
+    <div style={{ 
+      maxWidth: "800px", 
+      margin: "0 auto", 
+      padding: "20px"
+    }}>
+      <Header>Fall Detection Monitor</Header>
 
-      <div className="nurse-info" style={{ borderLeft: "5px solid #1A2238" }}>
-        <h2>Assigned Nurse: {nurseName}</h2>
+      <NurseInfo>
+        <h3>Assigned Nurse: {nurseName}</h3>
         <p>{nurseMessage}</p>
-      </div>
-
+      </NurseInfo>
+      
       <VideoContainer>
         <video ref={videoRef} width="640" height="480" autoPlay playsInline />
         <canvas ref={canvasRef} width="640" height="480" />
       </VideoContainer>
 
-      <StatusMessage className={isRunning ? "running" : "stopped"}>
-        {isRunning
-          ? "Fall detection is ACTIVE. AI is monitoring for falls."
-          : 'Fall detection is INACTIVE. Click "Start Detection" to begin monitoring.'}
-      </StatusMessage>
+      <StatusContainer>
+        <StatusMessage className={isRunning ? "running" : "stopped"}>
+          {isRunning
+            ? "Fall detection is ACTIVE. AI is monitoring for falls."
+            : 'Fall detection is INACTIVE. Click "Start Detection" to begin monitoring.'}
+        </StatusMessage>
+      </StatusContainer>
 
-      {cameraStatus && (
-        <StatusMessage className="stopped">{cameraStatus}</StatusMessage>
-      )}
+      <StatusContainer>
+        {cameraStatus && (
+          <StatusMessage>{cameraStatus}</StatusMessage>
+        )}
+      </StatusContainer>
 
       <Controls>
         <button

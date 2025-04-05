@@ -6,9 +6,8 @@ export const HeaderContainer = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: #1A2238;
-  color: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: transparent;
+  color: #97B3AE;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -30,7 +29,7 @@ export const Logo = styled.div`
   }
   
   .logo-text {
-    background: linear-gradient(90deg, #4CAF50, #8BC34A);
+    background: #c9e4de;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -49,16 +48,16 @@ export const Nav = styled.nav`
 `;
 
 export const NavLink = styled(Link)`
-  color: #E0E0E0;
+  color: #b8e0d2;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 700;
   padding: 0.5rem 0;
   position: relative;
   transition: color 0.3s ease;
   font-size: 1rem;
   
   &:hover {
-    color: white;
+    color: #95b8d1;
   }
   
   &:after {
@@ -68,7 +67,7 @@ export const NavLink = styled(Link)`
     height: 2px;
     bottom: 0;
     left: 0;
-    background-color: #4CAF50;
+    background-color: #95b8d1;
     transition: width 0.3s ease;
   }
   
@@ -77,39 +76,40 @@ export const NavLink = styled(Link)`
   }
   
   &[aria-current="page"] {
-    color: white;
+    color: #95b8d1;
     
     &:after {
       width: 100%;
-      background-color: #4CAF50;
+      background-color: #b8e0d2;
     }
   }
   
   &:focus-visible {
-    outline: 2px solid #4CAF50;
+    outline: 2px solid #c6def1;
     outline-offset: 4px;
     border-radius: 4px;
   }
 `;
 
 export const NavButton = styled(Link)`
-  background-color: #4CAF50;
-  color: white;
+  background-color: #c6def1;
+  color: #849ccc;
   border: none;
   padding: 0.5rem 1.2rem;
   border-radius: 4px;
-  font-weight: 500;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
   
   &:hover {
-    background-color: #388E3C;
+    background-color: #849ccc;
+    color: #c6def1;
     transform: translateY(-2px);
   }
   
   &:focus-visible {
-    outline: 2px solid #4CAF50;
+    outline: 2px solid #849ccc;
     outline-offset: 4px;
   }
 `;
@@ -130,7 +130,7 @@ export const MobileMenuButton = styled.button`
     display: block;
     width: 24px;
     height: 2px;
-    background-color: white;
+    background-color: #809bce;
     position: relative;
     transition: all 0.3s ease;
     
@@ -139,7 +139,7 @@ export const MobileMenuButton = styled.button`
       position: absolute;
       width: 24px;
       height: 2px;
-      background-color: white;
+      background-color: #809bce;
       transition: all 0.3s ease;
     }
     
@@ -152,24 +152,18 @@ export const MobileMenuButton = styled.button`
     }
   }
   
-  &[aria-expanded="true"] {
+  &:hover {
     .hamburger-icon {
-      background-color: transparent;
+      background-color: #95b8d1;
       
-      &:before {
-        transform: rotate(45deg);
-        top: 0;
-      }
-      
-      &:after {
-        transform: rotate(-45deg);
-        bottom: 0;
+      &:before, &:after {
+        background-color: #95b8d1;
       }
     }
   }
   
   &:focus-visible {
-    outline: 2px solid #4CAF50;
+    outline: 2px solid #809bce;
     outline-offset: 4px;
     border-radius: 4px;
   }
@@ -198,7 +192,8 @@ export const MobileNav = styled.nav`
   width: 80%;
   max-width: 300px;
   height: 100vh;
-  background-color: #1A2238;
+  background-color: white;
+  color: #809bce;
   padding: 5rem 1.5rem 2rem;
   display: flex;
   flex-direction: column;
@@ -214,37 +209,37 @@ export const MobileNav = styled.nav`
 `;
 
 export const MobileNavLink = styled(Link)`
-  color: #E0E0E0;
+  color: #849ccc;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 700;
   font-size: 1.1rem;
   padding: 0.5rem 0;
   transition: color 0.3s ease;
   
   &:hover {
-    color: white;
+    color: #97B3AE;
   }
   
   &[aria-current="page"] {
-    color: white;
-    border-left: 3px solid #4CAF50;
+    color: #97B3AE;
+    border-left: 3px solid #97B3AE;
     padding-left: 0.5rem;
   }
   
   &:focus-visible {
-    outline: 2px solid #4CAF50;
+    outline: 2px solid #849ccc;
     outline-offset: 4px;
     border-radius: 4px;
   }
 `;
 
 export const MobileNavButton = styled(Link)`
-  background-color: #4CAF50;
-  color: white;
+  background-color: #c6def1;
+  color: #849ccc;
   border: none;
   padding: 0.8rem 1.2rem;
   border-radius: 4px;
-  font-weight: 500;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
@@ -252,11 +247,12 @@ export const MobileNavButton = styled(Link)`
   margin-top: 1rem;
   
   &:hover {
-    background-color: #388E3C;
+    background-color: #849ccc;
+    color: #c6def1;
   }
   
   &:focus-visible {
-    outline: 2px solid #4CAF50;
+    outline: 2px solid #849ccc;
     outline-offset: 4px;
   }
 `; 

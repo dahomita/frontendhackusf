@@ -139,18 +139,18 @@ const PatientDashboard = () => {
 
       <aside className="quick-actions" role="complementary">
         <h2>Quick Actions</h2>
-        <button className="action-button" aria-label="Toggle voice control">
+        <Link to="/patient/voice" className="action-button" aria-label="Toggle voice control">
           <span className="action-icon">🎤</span>
           Voice Control
-        </button>
-        <button className="action-button" aria-label="View contact list">
+        </Link>
+        <Link to="/patient/contacts" className="action-button" aria-label="View contact list">
           <span className="action-icon">👥</span>
           Contacts
-        </button>
-        <button className="action-button" aria-label="View medication schedule">
+        </Link>
+        <Link to="/patient/medications" className="action-button" aria-label="View medication schedule">
           <span className="action-icon">💊</span>
           Medications
-        </button>
+        </Link>
       </aside>
     </div>
   );

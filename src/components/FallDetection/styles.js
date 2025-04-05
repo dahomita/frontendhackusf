@@ -9,7 +9,7 @@ export const VideoContainer = styled.div`
   video {
     width: 100%;
     max-width: 640px;
-    border: 2px solid #3498db;
+    border: 2px solid #809bce;
     border-radius: 8px;
   }
 
@@ -25,21 +25,25 @@ export const VideoContainer = styled.div`
 `;
 
 export const StatusMessage = styled.div`
-  margin: 20px 0;
-  padding: 15px;
+  margin: 20px auto;
+  padding: 15px 25px;
   border-radius: 6px;
   text-align: center;
   font-weight: bold;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  max-width: 90%;
 
   &.running {
-    background-color: #d5f5e3;
-    color: #27ae60;
+    background-color: rgba(184, 224, 210, 0.8);
+    color: #58b38e;
+    border-left: 3px solid #58b38e;
   }
 
   &.stopped {
-    background-color: #fadbd8;
+    background-color: rgba(252, 213, 213, 0.8);
     color: #e74c3c;
+    border-left: 3px solid #e74c3c;
   }
 
   &.hidden {
@@ -67,20 +71,20 @@ export const Controls = styled.div`
     }
 
     &.start {
-      background-color: #27ae60;
+      background-color: #58b38e;
       color: white;
 
       &:hover {
-        background-color: #219853;
+        background-color: #489e7b;
       }
     }
 
     &.stop {
-      background-color: #e74c3c;
+      background-color: #809bce;
       color: white;
 
       &:hover {
-        background-color: #c0392b;
+        background-color: #6c87ba;
       }
     }
 
@@ -102,5 +106,6 @@ export const DebugPanel = styled.div`
   text-align: left;
   height: 100px;
   overflow-y: auto;
-  box-shadow: 0 0 0px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 0px 5px rgba(128, 155, 206, 0.1);
+  border: 1px solid rgba(128, 155, 206, 0.2);
 `;
