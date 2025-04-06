@@ -1,5 +1,5 @@
 // API base URL from environment variable
-const API_URL = process.env.API_BASE_URL || "https://fallguardian-api.azurewebsites.net/api";
+const API_URL = process.env.API_BASE_URL;
 const AUTH_ENDPOINT = `${API_URL}/auth`;
 
 /**
