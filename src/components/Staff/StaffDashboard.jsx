@@ -5,9 +5,12 @@ import Card from '../Common/Card';
 import Button from '../Common/Button';
 import LoadingSpinner from '../Common/LoadingSpinner';
 
-const StaffDashboard = () => {
+// API base URL configuration
+const API_BASE_URL = '/api';
+
+const StaffDashboard = ({ defaultTab = 'overview' }) => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState(defaultTab);
   const [patients, setPatients] = useState([]);
   const [myPatients, setMyPatients] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,7 +49,7 @@ const StaffDashboard = () => {
     setError(null);
     
     try {
-      const response = await fetch(`${process.env.API_BASE_URL}/nurse/patients`, {
+      const response = await fetch(`${API_BASE_URL}/nurse/patients`, {
         credentials: 'include', // Include cookies for authentication
       });
       
@@ -74,7 +77,7 @@ const StaffDashboard = () => {
     setError(null);
     
     try {
-      const response = await fetch(`${process.env.API_BASE_URL}/nurse/me/patients`, {
+      const response = await fetch(`${API_BASE_URL}/nurse/me/patients`, {
         credentials: 'include', // Include cookies for authentication
       });
       
@@ -101,7 +104,7 @@ const StaffDashboard = () => {
     setSuccessMessage('');
     
     try {
-      const response = await fetch(`${process.env.API_BASE_URL}/nurse/me/patients/${patientId}/assign`, {
+      const response = await fetch(`${API_BASE_URL}/nurse/me/patients/${patientId}/assign`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -142,7 +145,7 @@ const StaffDashboard = () => {
     setSuccessMessage('');
     
     try {
-      const response = await fetch(`${process.env.API_BASE_URL}/nurse/me/patients/${patientId}`, {
+      const response = await fetch(`${API_BASE_URL}/nurse/me/patients/${patientId}`, {
         method: 'DELETE',
         credentials: 'include'
       });
@@ -185,11 +188,12 @@ const StaffDashboard = () => {
       fetchPatients();
     } else if (tab === 'myPatients') {
       fetchMyPatients();
-    } else if (tab === 'cancerDetection') {
+    } else if (tab === 'skinDetect') {
       // Reset the detection states when switching to this tab
       setImage(null);
       setImagePreview(null);
       setDetectionResult(null);
+      setError(null);
     }
   };
 
@@ -197,6 +201,20 @@ const StaffDashboard = () => {
     // Handle incident actions (acknowledge, respond, etc.)
     console.log(`Action ${action} taken on incident ${incidentId}`);
   };
+
+  // Load active tab from prop when component mounts or defaultTab changes
+  useEffect(() => {
+    setActiveTab(defaultTab);
+    
+    // Handle any initial tab-specific setup
+    if (defaultTab === 'skinDetect') {
+      // Reset the detection states when component mounts with this tab
+      setImage(null);
+      setImagePreview(null);
+      setDetectionResult(null);
+      setError(null);
+    }
+  }, [defaultTab]);
 
   // Fetch patients if tab is already 'patients' on first render
   useEffect(() => {
@@ -288,7 +306,7 @@ const StaffDashboard = () => {
       const formData = new FormData();
       formData.append('image', image);
       
-      const response = await fetch(`${process.env.API_BASE_URL}/cancer-detection`, {
+      const response = await fetch(`${API_BASE_URL}/cancer-detection`, {
         method: 'POST',
         body: formData,
         credentials: 'include',
@@ -398,9 +416,9 @@ const StaffDashboard = () => {
           Patient Messages
         </button>
         <button
-          className={`nav-button ${activeTab === 'cancerDetection' ? 'active' : ''}`}
-          onClick={() => handleTabChange('cancerDetection')}
-          aria-selected={activeTab === 'cancerDetection'}
+          className={`nav-button ${activeTab === 'skinDetect' ? 'active' : ''}`}
+          onClick={() => handleTabChange('skinDetect')}
+          aria-selected={activeTab === 'skinDetect'}
           role="tab"
         >
           Skin Cancer Detection
@@ -605,7 +623,7 @@ const StaffDashboard = () => {
           </section>
         )}
 
-        {activeTab === 'cancerDetection' && (
+        {activeTab === 'skinDetect' && (
           <section className="cancer-detection-section" aria-labelledby="cancer-detection-title">
             <h2 id="cancer-detection-title">Skin Cancer Detection</h2>
             
@@ -782,7 +800,7 @@ const StaffDashboard = () => {
         <button 
           className="action-button" 
           aria-label="Skin cancer detection"
-          onClick={() => handleTabChange('cancerDetection')}
+          onClick={() => handleTabChange('skinDetect')}
         >
           <span className="action-icon">🔬</span>
           Skin Cancer Detection
