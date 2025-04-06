@@ -6,7 +6,7 @@ export const HeaderContainer = styled.header`
   align-items: center;
   justify-content: space-between;
   padding: 1rem 2rem;
-  background-color: var(--surface-color);
+  background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
@@ -110,7 +110,7 @@ export const MobileNav = styled.div`
   top: 64px;
   left: 0;
   right: 0;
-  background-color: var(--surface-color);
+  background-color: #ffffff;
   padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transform: ${props => props.isOpen ? 'translateY(0)' : 'translateY(-100%)'};
@@ -221,7 +221,7 @@ export const UserMenuDropdown = styled.div`
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: var(--surface-color);
+  background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   min-width: 220px;
@@ -243,7 +243,7 @@ export const UserMenuDropdown = styled.div`
     right: 20px;
     width: 16px;
     height: 16px;
-    background-color: var(--surface-color);
+    background-color: #ffffff;
     transform: rotate(45deg);
     box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.05);
   }

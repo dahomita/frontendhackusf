@@ -7,11 +7,15 @@ const PatientDashboard = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
   const [fallRiskLevel, setFallRiskLevel] = useState('Low');
-  const [recentIncidents, setRecentIncidents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+  };
+
+  const handleAICompanionClick = () => {
+    // Open AI Companion in a new tab
+    window.open('https://safeguardcompanion.vercel.app/agent', '_blank', 'noopener,noreferrer');
   };
 
   useEffect(() => {
@@ -29,18 +33,8 @@ const PatientDashboard = () => {
     // Fetch recent incidents
     const fetchIncidents = async () => {
       try {
-        // TODO: Replace with actual API call
-        const mockIncidents = [
-          {
-            id: 1,
-            date: '2024-03-15',
-            time: '14:30',
-            location: 'Living Room',
-            severity: 'Minor',
-            status: 'Resolved'
-          }
-        ];
-        setRecentIncidents(mockIncidents);
+        // This function would normally fetch incidents from an API
+        // but we're not using the data in this component
       } catch (error) {
         console.error('Error fetching incidents:', error);
       } finally {
@@ -121,6 +115,14 @@ const PatientDashboard = () => {
         >
           Social Hub
         </button>
+        <button
+          className="nav-button ai-companion-btn"
+          onClick={handleAICompanionClick}
+          role="tab"
+          aria-label="Open AI Companion in a new window"
+        >
+          AI Companion
+        </button>
       </nav>
 
       <main className="dashboard-content" role="tabpanel">
@@ -176,13 +178,24 @@ const PatientDashboard = () => {
           <section className="help-section" aria-labelledby="help-title">
             <h2 id="help-title">Help Request Center</h2>
             <div className="help-options">
-              <button className="help-button emergency">Emergency Help</button>
-              <button className="help-button medical">
+              <Link 
+                to="/patient/forms/new?type=emergency" 
+                className="help-button emergency"
+              >
+                Emergency Help
+              </Link>
+              <Link 
+                to="/patient/forms/new?type=medical" 
+                className="help-button medical"
+              >
                 Medical Assistance
-              </button>
-              <button className="help-button technical">
+              </Link>
+              <Link 
+                to="/patient/forms/new?type=technical" 
+                className="help-button technical"
+              >
                 Technical Support
-              </button>
+              </Link>
             </div>
           </section>
         )}
@@ -212,6 +225,16 @@ const PatientDashboard = () => {
 
       <aside className="quick-actions" role="complementary">
         <h2>Quick Actions</h2>
+        <a 
+          href="https://safeguardcompanion.vercel.app/agent" 
+          className="action-button ai-action-button" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          aria-label="Open AI companion in a new window"
+        >
+          <span className="action-icon">🤖</span>
+          AI Companion
+        </a>
         <Link to="/patient/voice" className="action-button" aria-label="Toggle voice control">
           <span className="action-icon">🎤</span>
           Voice Control

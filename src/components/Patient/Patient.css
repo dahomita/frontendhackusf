@@ -74,6 +74,32 @@
   background-color: rgba(76, 175, 80, 0.1);
 }
 
+/* AI Companion Button */
+.nav-button.ai-companion-btn {
+  background-color: rgba(66, 133, 244, 0.1);
+  color: #4285F4;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  position: relative;
+  padding-left: 3rem;
+  transition: all 0.3s ease;
+}
+
+.nav-button.ai-companion-btn:hover {
+  background-color: rgba(66, 133, 244, 0.2);
+  color: #4285F4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(66, 133, 244, 0.15);
+}
+
+.nav-button.ai-companion-btn:before {
+  content: "🤖";
+  font-size: 1.4rem;
+  position: absolute;
+  left: 1rem;
+}
+
 /* Main Content */
 .dashboard-content {
   background: var(--surface-color);
@@ -345,6 +371,11 @@
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .help-button.emergency {
@@ -361,7 +392,22 @@
 
 .help-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: #000;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.help-button.emergency:hover {
+  background-color: #ff6b5b;
+}
+
+.help-button.medical:hover {
+  background-color: #5dade2;
+}
+
+.help-button.technical:hover {
+  background-color: #f4d03f;
 }
 
 /* Social Section */
@@ -435,6 +481,41 @@
   cursor: pointer;
   transition: all 0.3s ease;
   margin-bottom: 1rem;
+  text-decoration: none;
+}
+
+/* AI Companion Quick Action Button */
+.action-button.ai-action-button {
+  background: linear-gradient(135deg, rgba(66, 133, 244, 0.1) 0%, rgba(66, 133, 244, 0.2) 100%);
+  color: #4285F4;
+  border-left: 3px solid #4285F4;
+  font-weight: 600;
+  position: relative;
+  margin-bottom: 1.5rem;
+  transform: translateZ(0);
+  overflow: hidden;
+}
+
+.action-button.ai-action-button:hover {
+  background: linear-gradient(135deg, rgba(66, 133, 244, 0.2) 0%, rgba(66, 133, 244, 0.3) 100%);
+  transform: translateY(-3px) translateZ(0);
+  box-shadow: 0 6px 12px rgba(66, 133, 244, 0.15);
+}
+
+.action-button.ai-action-button:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transform: translateX(-100%);
+  transition: all 0.6s ease;
+}
+
+.action-button.ai-action-button:hover:after {
+  transform: translateX(100%);
 }
 
 .action-button:hover {

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Staff.css';
 
 const StaffDashboard = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
-  const [activeIncidents, setActiveIncidents] = useState([
+  const [activeIncidents] = useState([
     {
       id: 1,
       patientName: 'John Smith',
@@ -29,6 +31,10 @@ const StaffDashboard = () => {
   const handleIncidentAction = (incidentId, action) => {
     // Handle incident actions (acknowledge, respond, etc.)
     console.log(`Action ${action} taken on incident ${incidentId}`);
+  };
+
+  const handleNavigateToSkinDetect = () => {
+    navigate('/staff/skindetect');
   };
 
   return (
@@ -70,6 +76,13 @@ const StaffDashboard = () => {
           role="tab"
         >
           Reports
+        </button>
+        <button
+          className={`nav-button skin-detection-btn`}
+          onClick={handleNavigateToSkinDetect}
+          role="tab"
+        >
+          Skin Cancer Detection
         </button>
       </nav>
 

@@ -58,6 +58,27 @@
   background-color: rgba(52, 152, 219, 0.1);
 }
 
+.nav-button.skin-detection-btn {
+  background-color: rgba(156, 39, 176, 0.1);
+  color: #9c27b0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.nav-button.skin-detection-btn:hover {
+  background-color: rgba(156, 39, 176, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(156, 39, 176, 0.15);
+}
+
+.nav-button.skin-detection-btn:before {
+  content: "🔬";
+  font-size: 1.2rem;
+}
+
 /* Main Content */
 .dashboard-content {
   background-color: white;

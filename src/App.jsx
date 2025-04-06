@@ -23,6 +23,9 @@ import FallDetection from "./components/FallDetection/FallDetection";
 import ChatPage from "./components/ChatPage/ChatPage";
 import ComingSoon from "./components/ComingSoon/ComingSoon";
 import SkinDetect from "./components/SkinDetect/SkinDetect";
+import FormsPage from "./components/Patient/Forms/FormsPage";
+import NewForm from "./components/Patient/Forms/NewForm";
+import FormDetail from "./components/Patient/Forms/FormDetail";
 
 // Staff Components
 import StaffDashboard from "./components/Staff/StaffDashboard";
@@ -66,10 +69,9 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 };
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    localStorage.getItem("isAuthenticated") === "true"
-  );
-  const [userRole, setUserRole] = useState(localStorage.getItem("userRole"));
+  // Using authentication state from AuthContext instead of local state
+  const { isAuthenticated } = useAuth();
+  const userRole = localStorage.getItem("userRole");
   const [authState, setAuthState] = useState(isAuthenticated);
 
   return (
@@ -163,8 +165,36 @@ const App = () => {
               }
             />
             <Route
-              path="/staff/skindetect"
-              element={<SkinDetect />}
+              path="/patient/skindetect"
+              element={
+                <ProtectedRoute allowedRoles={["patient"]}>
+                  <SkinDetect />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/patient/forms"
+              element={
+                <ProtectedRoute allowedRoles={["patient"]}>
+                  <FormsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/patient/forms/new"
+              element={
+                <ProtectedRoute allowedRoles={["patient"]}>
+                  <NewForm />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/patient/forms/:id"
+              element={
+                <ProtectedRoute allowedRoles={["patient"]}>
+                  <FormDetail />
+                </ProtectedRoute>
+              }
             />
 
             {/* Coming Soon Routes */}
@@ -185,9 +215,9 @@ const App = () => {
             <Route
               path="/staff/dashboard"
               element={
-                <ProtectedRoute allowedRoles={["nurse"]}>
+                //<ProtectedRoute allowedRoles={["nurse"]}>
                   <StaffDashboard />
-                </ProtectedRoute>
+                //</ProtectedRoute>
               }
             />
 
