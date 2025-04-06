@@ -4,26 +4,29 @@ export const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: calc(100vh - 200px);
-  max-width: 800px;
+  max-width: 900px;
   margin: 2rem auto;
   background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
   overflow: hidden;
+  transition: var(--transition-normal);
 `;
 
 export const ChatHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1.5rem;
-  background-color: #1A2238;
+  padding: 1.25rem 1.75rem;
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
   color: white;
 `;
 
 export const ChatTitle = styled.h2`
   margin: 0;
   font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.5px;
 `;
 
 export const NurseInfo = styled.div`
@@ -33,14 +36,16 @@ export const NurseInfo = styled.div`
 `;
 
 export const NurseAvatar = styled.div`
-  width: 40px;
-  height: 40px;
-  background-color: #4CAF50;
+  width: 44px;
+  height: 44px;
+  background-color: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.4);
 `;
 
 export const NurseDetails = styled.div`
@@ -49,12 +54,25 @@ export const NurseDetails = styled.div`
 `;
 
 export const NurseName = styled.span`
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 1rem;
 `;
 
 export const NurseStatus = styled.span`
   font-size: 0.8rem;
-  color: #4CAF50;
+  color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #4ade80;
+    border-radius: 50%;
+  }
 `;
 
 export const ChatMessages = styled.div`
@@ -63,14 +81,44 @@ export const ChatMessages = styled.div`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  background-color: #f5f5f5;
+  gap: 1.25rem;
+  background-color: var(--neutral-100);
+  
+  /* Custom scrollbar */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: var(--neutral-100);
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--neutral-300);
+    border-radius: var(--radius-full);
+  }
+  
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--neutral-400);
+  }
 `;
 
 export const Message = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 70%;
+  max-width: 75%;
+  animation: messageAnimation 0.3s ease forwards;
+  
+  @keyframes messageAnimation {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
   
   &.nurse, &.assistant {
     align-self: flex-start;
@@ -82,17 +130,20 @@ export const Message = styled.div`
 `;
 
 export const MessageContent = styled.div`
-  padding: 0.8rem 1rem;
-  border-radius: 18px;
+  padding: 1rem 1.25rem;
+  border-radius: 16px;
   margin-bottom: 0.3rem;
+  box-shadow: var(--shadow-sm);
+  line-height: 1.5;
   
   ${Message}.nurse &, ${Message}.assistant & {
     background-color: white;
     border-bottom-left-radius: 4px;
+    color: var(--neutral-800);
   }
   
   ${Message}.patient &, ${Message}.user & {
-    background-color: #4CAF50;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: white;
     border-bottom-right-radius: 4px;
   }
@@ -100,48 +151,60 @@ export const MessageContent = styled.div`
 
 export const MessageTime = styled.span`
   font-size: 0.7rem;
-  color: #888;
+  color: var(--neutral-500);
   align-self: flex-end;
+  margin-top: 0.2rem;
 `;
 
 export const ChatInput = styled.form`
   display: flex;
-  padding: 1rem;
+  padding: 1.25rem;
   background-color: white;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--neutral-200);
 `;
 
 export const InputField = styled.input`
   flex: 1;
-  padding: 0.8rem 1rem;
-  border: 1px solid #ddd;
-  border-radius: 20px;
+  padding: 0.9rem 1.25rem;
+  border: 1px solid var(--neutral-300);
+  border-radius: var(--radius-full);
   outline: none;
   font-size: 1rem;
+  transition: var(--transition-normal);
   
   &:focus {
-    border-color: #4CAF50;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-light);
+  }
+  
+  &:disabled {
+    background-color: var(--neutral-100);
+    cursor: not-allowed;
   }
 `;
 
 export const SendButton = styled.button`
-  background-color: #4CAF50;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: white;
   border: none;
-  border-radius: 20px;
+  border-radius: var(--radius-full);
   padding: 0 1.5rem;
-  margin-left: 0.5rem;
+  margin-left: 0.75rem;
   cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
+  font-weight: 600;
+  transition: var(--transition-normal);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   
   &:hover {
-    background-color: #388E3C;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
   
   &:disabled {
-    background-color: #a5d6a7;
+    background: var(--neutral-400);
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
   }
 `;
 
@@ -153,20 +216,21 @@ const bounce = keyframes`
 
 export const TypingIndicator = styled.div`
   display: flex;
-  padding: 0.8rem 1rem;
+  padding: 0.9rem 1.2rem;
   background-color: white;
-  border-radius: 18px;
+  border-radius: 16px;
   border-bottom-left-radius: 4px;
   width: fit-content;
+  box-shadow: var(--shadow-sm);
   
   span {
     display: inline-block;
     width: 8px;
     height: 8px;
-    background-color: #999;
+    background-color: var(--primary-light);
     border-radius: 50%;
-    margin: 0 2px;
-    animation: ${bounce} 1s infinite;
+    margin: 0 3px;
+    animation: ${bounce} 1.2s infinite;
     
     &:nth-child(1) {
       animation-delay: 0s;
@@ -185,46 +249,65 @@ export const TypingIndicator = styled.div`
 export const ImageContainer = styled.div`
   margin-top: 1rem;
   max-width: 100%;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   overflow: hidden;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
+  background-color: var(--neutral-100);
+  position: relative;
+  
+  &::before {
+    content: '';
+    display: block;
+    padding-top: 75%; /* Maintain aspect ratio */
+  }
 `;
 
 export const GeneratedImage = styled.img`
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
-  object-fit: contain;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.03);
+  }
 `;
 
 export const ActionButtons = styled.div`
   display: flex;
   justify-content: center;
-  padding: 0.5rem;
+  padding: 0.75rem;
   background-color: white;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--neutral-200);
 `;
 
 export const ActionButton = styled.button`
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border: none;
   border-radius: 50%;
-  background-color: #f0f0f0;
-  font-size: 1.2rem;
+  background-color: var(--neutral-200);
+  font-size: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--transition-normal);
   margin: 0 0.5rem;
+  box-shadow: var(--shadow-sm);
   
   &:hover {
-    background-color: #e0e0e0;
+    background-color: var(--neutral-300);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
   }
   
   &.active {
-    background-color: #4CAF50;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: white;
   }
 `; 
