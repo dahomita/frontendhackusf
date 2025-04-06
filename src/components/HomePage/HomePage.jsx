@@ -89,9 +89,9 @@ const HomePage = () => {
           {/* Hero content overlay with 50% opacity */}
           <HeroContent>
             <HeroContentInner>
-              <HeroTitle>FallGuardian</HeroTitle>
+              <HeroTitle>SafeGuard</HeroTitle>
               <HeroSubtitle>
-                Advanced AI-powered fall detection for the elderly and vulnerable
+                Advanced AI-powered healthcare solutions for safety and wellbeing
               </HeroSubtitle>
               <ButtonGroup>
                 <HeroButton as={Link} to="/signup" aria-label="Sign Up">
@@ -107,6 +107,7 @@ const HomePage = () => {
         
         <ScrollLinks>
           <ScrollLink href="#inspiration" className="scroll-link">Inspiration</ScrollLink>
+          <ScrollLink href="#features" className="scroll-link">Features</ScrollLink>
           <ScrollLink href="#how-it-works" className="scroll-link">How It Works</ScrollLink>
           <ScrollLink href="#get-started" className="scroll-link">Get Started</ScrollLink>
         </ScrollLinks>
@@ -118,7 +119,7 @@ const HomePage = () => {
               <CardIcon>👴</CardIcon>
               <CardTitle>Supporting Independence</CardTitle>
               <CardDescription>
-                We believe everyone deserves to live independently with dignity. FallGuardian helps elderly individuals maintain their autonomy while providing peace of mind to loved ones.
+                We believe everyone deserves to live independently with dignity. SafeGuard helps elderly individuals maintain their autonomy while providing peace of mind to loved ones.
               </CardDescription>
             </Card>
             
@@ -140,6 +141,37 @@ const HomePage = () => {
           </SectionContent>
         </Section>
         
+        <Section id="features" variant="light">
+          <SectionTitle>Our Main Features</SectionTitle>
+          <SectionContent>
+            <CardGrid>
+              <Card>
+                <CardIcon>🤖</CardIcon>
+                <CardTitle>AI Companion</CardTitle>
+                <CardDescription>
+                  Offers friendly conversation and companionship. Provides quick, common replies to reduce doctors' workload.
+                </CardDescription>
+              </Card>
+              
+              <Card>
+                <CardIcon>🔍</CardIcon>
+                <CardTitle>Skin Cancer Detection</CardTitle>
+                <CardDescription>
+                  Detects early skin anomalies. Uses AI for accurate analysis and monitoring.
+                </CardDescription>
+              </Card>
+              
+              <Card>
+                <CardIcon>📱</CardIcon>
+                <CardTitle>Fall Detection</CardTitle>
+                <CardDescription>
+                  Detects falls and emergencies in real-time. Sends SMS alerts to caregivers and family.
+                </CardDescription>
+              </Card>
+            </CardGrid>
+          </SectionContent>
+        </Section>
+        
         <Section id="how-it-works" variant="light">
           <SectionTitle>How It Works</SectionTitle>
           <SectionContent>
@@ -148,7 +180,7 @@ const HomePage = () => {
                 <CardIcon>📱</CardIcon>
                 <CardTitle>1. Easy Setup</CardTitle>
                 <CardDescription>
-                  Simply install the FallGuardian app on your smartphone or tablet. Our intuitive interface makes setup quick and straightforward.
+                  Simply install the SafeGuard app on your smartphone or tablet. Our intuitive interface makes setup quick and straightforward.
                 </CardDescription>
               </Card>
               
@@ -214,7 +246,7 @@ const HomePage = () => {
           <CtaContent>
             <CtaTitle>Ready to enhance safety?</CtaTitle>
             <CtaDescription>
-              Join thousands of healthcare providers who trust FallGuardian for reliable fall detection.
+              Join thousands of healthcare providers who trust SafeGuard for reliable fall detection.
             </CtaDescription>
             <ButtonGroup>
               <CtaButton as={Link} to="/signup" aria-label="Get Started Now">

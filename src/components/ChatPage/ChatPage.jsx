@@ -22,11 +22,14 @@ import {
   ImageContainer
 } from './styles';
 
+// API endpoint configuration
+const API_BASE_URL = '/api';
+
 const ChatPage = () => {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "Hello! I'm your FallGuardian AI assistant. How can I help you today?",
+      text: "Hello! I'm your SafeGuard AI assistant. How can I help you today?",
       sender: "assistant",
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
@@ -49,7 +52,7 @@ const ChatPage = () => {
     try {
       setIsLoading(true);
       
-      const response = await fetch(`${process.env.API_BASE_URL}/ai/generate`, {
+      const response = await fetch(`${API_BASE_URL}/ai/generate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,7 +88,7 @@ const ChatPage = () => {
     try {
       setIsLoading(true);
       
-      const response = await fetch(`${process.env.API_BASE_URL}/ai/image`, {
+      const response = await fetch(`${API_BASE_URL}/ai/image`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -201,7 +204,7 @@ const ChatPage = () => {
         <NurseInfo>
           <NurseAvatar>🤖</NurseAvatar>
           <NurseDetails>
-            <NurseName>FallGuardian AI</NurseName>
+            <NurseName>SafeGuard AI</NurseName>
             <NurseStatus>Online</NurseStatus>
           </NurseDetails>
         </NurseInfo>
