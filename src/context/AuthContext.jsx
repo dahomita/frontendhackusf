@@ -1,5 +1,5 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import api from '../services/api';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { authService } from '../services/authService';
 
 /**
  * AuthContext
@@ -8,8 +8,8 @@ import api from '../services/api';
  * It handles user authentication, profile management, and session persistence.
  */
 
-// Create the context
-const AuthContext = createContext();
+// Create the auth context
+const AuthContext = createContext(null);
 
 /**
  * AuthProvider Component
@@ -25,102 +25,102 @@ export const AuthProvider = ({ children }) => {
    * Check if the user is authenticated
    * This is called on initial load and after authentication
    */
-  const checkAuth = async () => {
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      console.log('Checking authentication status...');
+      try {
+        setLoading(true);
+        const currentUser = await authService.getCurrentUser();
+        console.log('Auth status check result:', currentUser ? 'Authenticated' : 'Not authenticated');
+        setUser(currentUser);
+      } catch (err) {
+        console.error('Auth status check failed:', err);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuthStatus();
+  }, []);
+
+  /**
+   * Register a new user
+   * @param {string} username - The username of the new user
+   * @param {string} email - The email of the new user
+   * @param {string} password - The password of the new user
+   * @returns {Promise<Object>} - The user data and authentication token
+   */
+  const register = async (username, email, password) => {
+    console.log('Attempting to register user:', email);
     try {
       setLoading(true);
       setError(null);
-      
-      // Try to get the current user from the API
-      const userData = await api.auth.getCurrentUser();
-      
-      // If successful, update the user state
-      setUser(userData);
-      
-      // Store authentication state in localStorage
-      localStorage.setItem('isAuthenticated', 'true');
-      localStorage.setItem('userRole', userData.role);
+      const userData = await authService.register(username, email, password);
+      console.log('Registration successful:', userData);
+      setUser(userData.user);
+      return userData;
     } catch (err) {
-      // If there's an error, clear the user state
-      setUser(null);
-      localStorage.removeItem('isAuthenticated');
-      localStorage.removeItem('userRole');
-      
-      // Only set error if it's not a 401 (Unauthorized) error
-      // 401 is expected when the user is not authenticated
-      if (err.status !== 401) {
-        setError(err.message || 'Failed to authenticate user');
-        console.error('Authentication error:', err);
-      }
+      console.error('Registration failed:', err);
+      setError(err.message || 'Registration failed');
+      throw err;
     } finally {
       setLoading(false);
     }
   };
 
   /**
-   * Initialize authentication on component mount
+   * Login a user
+   * @param {string} email - The email of the user
+   * @param {string} password - The password of the user
+   * @returns {Promise<Object>} - The user data and authentication token
    */
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  /**
-   * Handle Google authentication
-   * This redirects the user to the Google authentication page
-   */
-  const loginWithGoogle = () => {
-    // Redirect to the Google authentication URL
-    window.location.href = api.auth.getGoogleAuthUrl();
+  const login = async (email, password) => {
+    console.log('Attempting to log in user:', email);
+    try {
+      setLoading(true);
+      setError(null);
+      const userData = await authService.login(email, password);
+      console.log('Login successful:', userData);
+      setUser(userData.user);
+      return userData;
+    } catch (err) {
+      console.error('Login failed:', err);
+      setError(err.message || 'Login failed');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
   };
 
   /**
    * Logout the current user
    */
   const logout = async () => {
+    console.log('Attempting to log out user');
     try {
       setLoading(true);
       setError(null);
-      
-      // Call the logout API
-      await api.auth.logout();
-      
-      // Clear the user state
+      await authService.logout();
+      console.log('Logout successful');
       setUser(null);
-      localStorage.removeItem('isAuthenticated');
-      localStorage.removeItem('userRole');
     } catch (err) {
-      setError(err.message || 'Failed to logout');
-      console.error('Logout error:', err);
+      console.error('Logout failed:', err);
+      setError(err.message || 'Logout failed');
+      throw err;
     } finally {
       setLoading(false);
     }
   };
 
   /**
-   * Update the user's profile
-   * @param {Object} userData - The user data to update
+   * Handle Google authentication
+   * This redirects the user to the Google authentication page
    */
-  const updateProfile = async (userData) => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      // Call the update profile API
-      const updatedUser = await api.users.updateProfile(userData);
-      
-      // Update the user state
-      setUser(updatedUser);
-      
-      // Update the role in localStorage
-      localStorage.setItem('userRole', updatedUser.role);
-      
-      return updatedUser;
-    } catch (err) {
-      setError(err.message || 'Failed to update profile');
-      console.error('Update profile error:', err);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
+  const googleLogin = () => {
+    console.log('Redirecting to Google OAuth');
+    // Redirect to the Google OAuth route
+    window.location.href = `${process.env.API_BASE_URL || "https://fallguardian-api.azurewebsites.net/api"}/auth/google`;
   };
 
   // Context value
@@ -128,12 +128,19 @@ export const AuthProvider = ({ children }) => {
     user,
     loading,
     error,
-    isAuthenticated: !!user,
-    loginWithGoogle,
+    register,
+    login,
     logout,
-    updateProfile,
-    checkAuth,
+    googleLogin,
+    isAuthenticated: !!user,
   };
+
+  console.log('Auth context state:', { 
+    isAuthenticated: !!user, 
+    loading, 
+    hasError: !!error,
+    userRole: user?.role 
+  });
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
@@ -145,7 +152,8 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   
-  if (context === undefined) {
+  if (!context) {
+    console.error('useAuth must be used within an AuthProvider');
     throw new Error('useAuth must be used within an AuthProvider');
   }
   
