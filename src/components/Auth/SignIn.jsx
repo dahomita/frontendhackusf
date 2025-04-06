@@ -58,7 +58,7 @@ const SignIn = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h1 className="auth-title">Welcome to FallGuardian</h1>
+        <h1 className="auth-title">Welcome to SafeGuard</h1>
         <p className="auth-subtitle">Sign in to access your account</p>
 
         {error && (

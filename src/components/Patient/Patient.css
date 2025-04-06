@@ -58,6 +58,22 @@
   background-color: rgba(76, 175, 80, 0.1);
 }
 
+.nav-button[href*="safeguardcompanion"] {
+  color: #3498db;
+  display: flex;
+  align-items: center;
+}
+
+.nav-button[href*="safeguardcompanion"]::before {
+  content: "🤖";
+  margin-right: 0.5rem;
+}
+
+.nav-button[href*="safeguardcompanion"]:hover {
+  background-color: rgba(52, 152, 219, 0.1);
+  color: #2980b9;
+}
+
 /* Main Content */
 .dashboard-content {
   background-color: white;

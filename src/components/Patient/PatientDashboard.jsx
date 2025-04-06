@@ -103,6 +103,15 @@ const PatientDashboard = () => {
         >
           Social Hub
         </button>
+        <a
+          href="https://safeguardcompanion.vercel.app/agent"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="nav-button"
+          role="tab"
+        >
+          AI Companion
+        </a>
       </nav>
 
       {error && activeTab === "nurse" && (
