@@ -5,6 +5,7 @@ import "@tensorflow/tfjs-backend-webgl";
 import styled from "styled-components";
 // import { detectFall } from "./fallDetectionUtils";
 import { VideoContainer, StatusMessage, Controls, DebugPanel } from "./styles";
+import api from "../../services/api";
 
 import { detectFall, logPoseMetrics } from "./fallDetectionUtils";
 
@@ -290,32 +291,38 @@ const FallDetection = ({ nurseName, nurseMessage }) => {
   const reportFall = async () => {
     try {
       setCameraStatus("⚠️ FALL DETECTED! Notifying nurse...");
-
-      // Mock API call
-      /*
-      const response = await fetch('/api/patients/me/fall/record', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setCameraStatus('✅ Fall reported successfully. Nurse has been notified.');
-        setTimeout(() => {
-          setCameraStatus('');
-        }, 5000);
-      } else {
-        setCameraStatus('❌ Error reporting fall: ' + (data.error || 'Unknown error'));
+      
+      try {
+        // Call the real API endpoint
+        const response = await fetch(`${process.env.API_BASE_URL}/patient/me/fall`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include', // Include cookies for authentication
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          setCameraStatus("✅ Fall reported successfully. Nurse has been notified.");
+          log(`Fall reported to nurse successfully. ${data.message}`);
+          
+          // You could also log nurse details if needed
+          if (data.nurse) {
+            log(`Notified: ${data.nurse.name}`);
+          }
+        } else {
+          setCameraStatus("❌ Error reporting fall: " + (data.message || 'Unknown error'));
+          log("ERROR reporting fall: " + (data.message || 'Unknown error'));
+        }
+      } catch (error) {
+        setCameraStatus("❌ Error reporting fall: " + error.message);
+        log("ERROR reporting fall: " + error.message);
       }
-      */
-
-      // Mock success response
-      setCameraStatus(
-        "✅ Fall reported successfully. Nurse has been notified."
-      );
+      
       setTimeout(() => {
-        setCameraStatus("");
+        if (isRunningRef.current) {
+          setCameraStatus("");
+        }
       }, 5000);
     } catch (err) {
       console.error("Error reporting fall:", err);
@@ -354,17 +361,6 @@ const FallDetection = ({ nurseName, nurseMessage }) => {
       // Start the detection directly
       detectPose();
 
-      // Mock API call
-      /*
-      const response = await fetch('/api/patients/me/fall', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ action: 'start' })
-      });
-      */
-
       log("Fall detection started");
     } catch (err) {
       console.error("Error starting detection:", err);
@@ -395,17 +391,6 @@ const FallDetection = ({ nurseName, nurseMessage }) => {
         ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
       }
 
-      // Mock API call
-      /*
-      const response = await fetch('/api/patients/me/fall', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ action: 'stop' })
-      });
-      */
-
       log("Fall detection stopped");
     } catch (err) {
       console.error("Error stopping detection:", err);
@@ -430,17 +415,6 @@ const FallDetection = ({ nurseName, nurseMessage }) => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
-
-      // Mock API call - cleanup on unmount
-      /*
-      if (isRunning) {
-        fetch('/api/patients/me/fall', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'stop' })
-        }).catch(console.error);
-      }
-      */
     };
   }, []);
 

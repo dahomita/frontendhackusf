@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Staff.css';
 
 const StaffDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [patients, setPatients] = useState([]);
+  const [myPatients, setMyPatients] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
   const [activeIncidents, setActiveIncidents] = useState([
     {
       id: 1,
@@ -22,14 +27,163 @@ const StaffDashboard = () => {
     }
   ]);
 
+  const fetchPatients = async () => {
+    if (patients.length > 0) return; // Avoid fetching if we already have data
+    
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetch(`${process.env.API_BASE_URL}/nurse/patients`, {
+        credentials: 'include', // Include cookies for authentication
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to load patients');
+      }
+      
+      const data = await response.json();
+      
+      // API directly returns array of patients, not wrapped in a success object
+      setPatients(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error('Error fetching patients:', err);
+      setError(err.message || 'Failed to connect to server. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchMyPatients = async () => {
+    if (myPatients.length > 0) return; // Avoid fetching if we already have data
+    
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetch(`${process.env.API_BASE_URL}/nurse/me/patients`, {
+        credentials: 'include', // Include cookies for authentication
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to load your patients');
+      }
+      
+      const data = await response.json();
+      
+      // API directly returns array of patients
+      setMyPatients(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error('Error fetching assigned patients:', err);
+      setError(err.message || 'Failed to connect to server. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const assignPatient = async (patientId) => {
+    setIsLoading(true);
+    setError(null);
+    setSuccessMessage('');
+    
+    try {
+      const response = await fetch(`${process.env.API_BASE_URL}/nurse/me/patients/${patientId}/assign`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to assign patient');
+      }
+      
+      // Update my patients list
+      await fetchMyPatients();
+      
+      // Update the all patients list to reflect assignment
+      setPatients(patients.map(p => 
+        p._id === patientId ? { ...p, nurseId: true } : p
+      ));
+      
+      setSuccessMessage('Patient assigned successfully');
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 3000);
+    } catch (err) {
+      console.error('Error assigning patient:', err);
+      setError(err.message || 'Failed to assign patient. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const removePatient = async (patientId) => {
+    setIsLoading(true);
+    setError(null);
+    setSuccessMessage('');
+    
+    try {
+      const response = await fetch(`${process.env.API_BASE_URL}/nurse/me/patients/${patientId}`, {
+        method: 'DELETE',
+        credentials: 'include'
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to remove patient');
+      }
+      
+      // Update local state to remove patient from my patients
+      setMyPatients(myPatients.filter(p => p._id !== patientId));
+      
+      // Update the all patients list to reflect the unassignment
+      setPatients(patients.map(p => 
+        p._id === patientId ? { ...p, nurseId: null } : p
+      ));
+      
+      setSuccessMessage('Patient removed successfully');
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 3000);
+    } catch (err) {
+      console.error('Error removing patient:', err);
+      setError(err.message || 'Failed to remove patient. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleTabChange = (tab) => {
     setActiveTab(tab);
+    if (tab === 'patients') {
+      fetchPatients();
+    } else if (tab === 'myPatients') {
+      fetchMyPatients();
+    }
   };
 
   const handleIncidentAction = (incidentId, action) => {
     // Handle incident actions (acknowledge, respond, etc.)
     console.log(`Action ${action} taken on incident ${incidentId}`);
   };
+
+  // Fetch patients if tab is already 'patients' on first render
+  useEffect(() => {
+    if (activeTab === 'patients') {
+      fetchPatients();
+    } else if (activeTab === 'myPatients') {
+      fetchMyPatients();
+    }
+  }, []);
 
   return (
     <div className="staff-dashboard" role="main">
@@ -61,7 +215,15 @@ const StaffDashboard = () => {
           aria-selected={activeTab === 'patients'}
           role="tab"
         >
-          Patient List
+          All Patients
+        </button>
+        <button
+          className={`nav-button ${activeTab === 'myPatients' ? 'active' : ''}`}
+          onClick={() => handleTabChange('myPatients')}
+          aria-selected={activeTab === 'myPatients'}
+          role="tab"
+        >
+          My Patients
         </button>
         <button
           className={`nav-button ${activeTab === 'reports' ? 'active' : ''}`}
@@ -72,6 +234,12 @@ const StaffDashboard = () => {
           Reports
         </button>
       </nav>
+
+      {successMessage && (
+        <div className="success-message" role="alert">
+          {successMessage}
+        </div>
+      )}
 
       <main className="dashboard-content" role="tabpanel">
         {activeTab === 'overview' && (
@@ -140,7 +308,7 @@ const StaffDashboard = () => {
 
         {activeTab === 'patients' && (
           <section className="patients-section" aria-labelledby="patients-title">
-            <h2 id="patients-title">Patient List</h2>
+            <h2 id="patients-title">All Patients</h2>
             <div className="search-bar">
               <input
                 type="search"
@@ -150,8 +318,109 @@ const StaffDashboard = () => {
               />
             </div>
             <div className="patients-list" role="list">
-              {/* Patient list items would go here */}
-              <p className="placeholder-text">Patient list loading...</p>
+              {isLoading ? (
+                <p className="placeholder-text">Loading patients...</p>
+              ) : error ? (
+                <p className="error-text">{error}</p>
+              ) : patients.length === 0 ? (
+                <p className="placeholder-text">No patients found</p>
+              ) : (
+                patients.map(patient => (
+                  <div key={patient._id} className="patient-card" role="listitem">
+                    <div className="patient-info">
+                      <div className="patient-header">
+                        <h3>{patient.name}</h3>
+                        <div className="patient-avatar">
+                          <img src={patient.avatar} alt={`${patient.name}'s avatar`} />
+                        </div>
+                      </div>
+                      <div className="patient-details">
+                        <p><strong>Email:</strong> {patient.email}</p>
+                        {patient.age && <p><strong>Age:</strong> {patient.age}</p>}
+                        {patient.phoneNumber && <p><strong>Phone:</strong> {patient.phoneNumber}</p>}
+                        <p><strong>Status:</strong> {patient.nurseId ? 'Assigned' : 'Unassigned'}</p>
+                      </div>
+                    </div>
+                    <div className="patient-actions">
+                      {!patient.nurseId ? (
+                        <button 
+                          className="assign-patient-button"
+                          onClick={() => assignPatient(patient._id)}
+                          disabled={isLoading}
+                          aria-label={`Assign ${patient.name} to yourself`}
+                        >
+                          Assign to Me
+                        </button>
+                      ) : (
+                        <button 
+                          className="view-patient-button"
+                          aria-label={`View details for ${patient.name}`}
+                        >
+                          View Details
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </section>
+        )}
+
+        {activeTab === 'myPatients' && (
+          <section className="patients-section" aria-labelledby="my-patients-title">
+            <h2 id="my-patients-title">My Assigned Patients</h2>
+            <div className="search-bar">
+              <input
+                type="search"
+                placeholder="Search my patients..."
+                aria-label="Search my patients"
+                className="search-input"
+              />
+            </div>
+            <div className="patients-list" role="list">
+              {isLoading ? (
+                <p className="placeholder-text">Loading your patients...</p>
+              ) : error ? (
+                <p className="error-text">{error}</p>
+              ) : myPatients.length === 0 ? (
+                <p className="placeholder-text">You have no assigned patients</p>
+              ) : (
+                myPatients.map(patient => (
+                  <div key={patient._id} className="patient-card" role="listitem">
+                    <div className="patient-info">
+                      <div className="patient-header">
+                        <h3>{patient.name}</h3>
+                        <div className="patient-avatar">
+                          <img src={patient.avatar} alt={`${patient.name}'s avatar`} />
+                        </div>
+                      </div>
+                      <div className="patient-details">
+                        <p><strong>Email:</strong> {patient.email}</p>
+                        {patient.age && <p><strong>Age:</strong> {patient.age}</p>}
+                        {patient.phoneNumber && <p><strong>Phone:</strong> {patient.phoneNumber}</p>}
+                        <p><strong>Status:</strong> Assigned to you</p>
+                      </div>
+                    </div>
+                    <div className="patient-actions">
+                      <button 
+                        className="view-patient-button"
+                        aria-label={`View details for ${patient.name}`}
+                      >
+                        View Details
+                      </button>
+                      <button 
+                        className="remove-patient-button"
+                        onClick={() => removePatient(patient._id)}
+                        disabled={isLoading}
+                        aria-label={`Unassign ${patient.name}`}
+                      >
+                        Unassign
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </section>
         )}
