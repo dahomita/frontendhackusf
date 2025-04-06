@@ -25,88 +25,89 @@ export const CanvasContainer = styled.div`
 
 export const HeroSection = styled.section`
   width: 100%;
-  min-height: 70vh;
+  min-height: 80vh;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: transparent;
   color: white;
-  padding: 0;
+  padding: 2rem 0;
   position: relative;
   overflow: hidden;
   
   @media (max-width: 768px) {
-    flex-direction: column;
-    min-height: 90vh;
+    min-height: 80vh;
+    padding: 1rem 0;
   }
 `;
 
 export const CanvasWrapper = styled.div`
-  flex: 1;
-  width: 50%;
-  height: 70vh;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
   background-color: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   
   & > canvas {
     width: 100% !important;
     height: 100% !important;
   }
-  
-  @media (max-width: 768px) {
-    width: 100%;
-    height: 40vh;
-  }
 `;
 
 export const HeroContent = styled.div`
-  flex: 1;
-  max-width: 600px;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 3rem;
-  background: linear-gradient(135deg, rgba(184, 224, 210, 0.8) 0%, rgba(128, 203, 174, 0.8) 100%);
-  border-radius: 12px;
+  padding: 2rem;
+  background: linear-gradient(135deg, 
+    rgba(0, 0, 0, 0.6) 0%, 
+    rgba(0, 0, 0, 0.4) 100%);
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 70vh;
+  z-index: 2;
+  position: relative;
   
   @media (max-width: 768px) {
-    padding: 2rem;
-    width: 100%;
-    max-width: 100%;
-    height: auto;
+    padding: 1.5rem;
   }
 `;
 
+export const HeroContentInner = styled.div`
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+`;
+
 export const HeroTitle = styled.h1`
-  font-size: 4rem;
-  color: #809bce;
+  font-size: 3rem;
+  color: #ffffff;
   font-weight: 700;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   line-height: 1.2;
   text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   
   @media (max-width: 768px) {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
 `;
 
 export const HeroSubtitle = styled.p`
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
   line-height: 1.5;
-  opacity: 0.9;
+  color: #ffffff;
   text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   
   @media (max-width: 768px) {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 `;
 
@@ -125,21 +126,22 @@ export const ButtonGroup = styled.div`
 `;
 
 export const HeroButton = styled.button`
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
+  padding: 0.8rem 1.6rem;
+  font-size: 1rem;
   font-weight: 600;
   border-radius: 50px;
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
-  background-color: #c6def1;
-  color: #809bce;
+  background-color: rgba(198, 222, 241, 0.9);
+  color: #25507c;
   border: 2px solid white;
   
   &:hover {
     transform: translateY(-2px);
-    color: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    color: #25507c;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
   
   &:focus-visible {
@@ -149,6 +151,7 @@ export const HeroButton = styled.button`
   
   @media (max-width: 480px) {
     width: 100%;
+    padding: 0.7rem 1.4rem;
   }
 `;
 

@@ -23,7 +23,8 @@ import {
   ButtonGroup,
   ScrollLink,
   ScrollLinks,
-  CanvasWrapper
+  CanvasWrapper,
+  HeroContentInner
 } from './styles';
 import { Canvas } from '@react-three/fiber'
 import { Environment, OrbitControls } from '@react-three/drei'
@@ -60,13 +61,13 @@ const HomePage = () => {
       {/* Content Container */}
       <div style={{ position: 'relative', zIndex: 2 }}>
         <HeroSection>
-          {/* Left side: Canvas */}
+          {/* Canvas as background */}
           <CanvasWrapper>
             <Canvas 
               camera={{ position: [130, 70, 30], fov: 60 }}
               style={{ width: '100%', height: '100%', background: 'transparent' }}
               gl={{ alpha: true, antialias: true, clearColor: [0, 0, 0, 0] }}
-              >
+            >
               <Suspense fallback={null}>
                 <OrbitControls 
                   enableZoom={true} 
@@ -85,20 +86,22 @@ const HomePage = () => {
             </Canvas>
           </CanvasWrapper>
           
-          {/* Right side: Hero content */}
+          {/* Hero content overlay with 50% opacity */}
           <HeroContent>
-            <HeroTitle>FallGuardian</HeroTitle>
-            <HeroSubtitle>
-              Advanced AI-powered fall detection for the elderly and vulnerable
-            </HeroSubtitle>
-            <ButtonGroup>
-              <HeroButton as={Link} to="/signup" aria-label="Sign Up">
-                Get Started
-              </HeroButton>
-              <HeroButton as={Link} to="/signin" variant="outline" aria-label="Sign In">
-                Sign In
-              </HeroButton>
-            </ButtonGroup>
+            <HeroContentInner>
+              <HeroTitle>FallGuardian</HeroTitle>
+              <HeroSubtitle>
+                Advanced AI-powered fall detection for the elderly and vulnerable
+              </HeroSubtitle>
+              <ButtonGroup>
+                <HeroButton as={Link} to="/signup" aria-label="Sign Up">
+                  Get Started
+                </HeroButton>
+                <HeroButton as={Link} to="/signin" variant="outline" aria-label="Sign In">
+                  Sign In
+                </HeroButton>
+              </ButtonGroup>
+            </HeroContentInner>
           </HeroContent>
         </HeroSection>
         
