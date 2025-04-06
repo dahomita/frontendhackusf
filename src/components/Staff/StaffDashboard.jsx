@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Staff.css';
 
 const StaffDashboard = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
   const [patients, setPatients] = useState([]);
   const [myPatients, setMyPatients] = useState([]);
@@ -163,6 +165,11 @@ const StaffDashboard = () => {
   };
 
   const handleTabChange = (tab) => {
+    if (tab === 'forms') {
+      navigate('/staff/forms');
+      return;
+    }
+    
     setActiveTab(tab);
     if (tab === 'patients') {
       fetchPatients();
@@ -224,6 +231,14 @@ const StaffDashboard = () => {
           role="tab"
         >
           My Patients
+        </button>
+        <button
+          className={`nav-button ${activeTab === 'forms' ? 'active' : ''}`}
+          onClick={() => handleTabChange('forms')}
+          aria-selected={activeTab === 'forms'}
+          role="tab"
+        >
+          Patient Messages
         </button>
         <button
           className={`nav-button ${activeTab === 'reports' ? 'active' : ''}`}
@@ -457,6 +472,14 @@ const StaffDashboard = () => {
         <button className="action-button" aria-label="Add new patient">
           <span className="action-icon">➕</span>
           Add Patient
+        </button>
+        <button 
+          className="action-button" 
+          aria-label="View patient messages"
+          onClick={() => navigate('/staff/forms')}
+        >
+          <span className="action-icon">✉️</span>
+          Patient Messages
         </button>
         <button className="action-button" aria-label="View alerts">
           <span className="action-icon">🔔</span>

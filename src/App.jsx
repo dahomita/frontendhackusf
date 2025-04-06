@@ -21,10 +21,15 @@ import PatientDashboard from "./components/Patient/PatientDashboard";
 import FallDetection from "./components/FallDetection/FallDetection";
 import ChatPage from "./components/ChatPage/ChatPage";
 import ComingSoon from "./components/ComingSoon/ComingSoon";
+import FormsPage from "./components/Patient/Forms/FormsPage";
+import FormDetail from "./components/Patient/Forms/FormDetail";
+import NewForm from "./components/Patient/Forms/NewForm";
 
 // Staff Components
 import StaffDashboard from "./components/Staff/StaffDashboard";
 import FallPopup from "./components/Staff/FallPopup";
+import NurseForms from "./components/Staff/Forms/NurseForms";
+import NurseFormDetail from "./components/Staff/Forms/NurseFormDetail";
 
 // Error Pages
 import NotFound from "./components/NotFound/NotFound";
@@ -97,6 +102,32 @@ const App = () => {
                 <ChatPage />
               }
             />
+            
+            {/* Patient Form Routes */}
+            <Route
+              path="/patient/forms"
+              element={
+                // <ProtectedRoute requiredRole="patient">
+                // </ProtectedRoute>
+                <FormsPage />
+              }
+            />
+            <Route
+              path="/patient/forms/new"
+              element={
+                // <ProtectedRoute requiredRole="patient">
+                // </ProtectedRoute>
+                <NewForm />
+              }
+            />
+            <Route
+              path="/patient/forms/:formId"
+              element={
+                // <ProtectedRoute requiredRole="patient">
+                // </ProtectedRoute>
+                <FormDetail />
+              }
+            />
 
             {/* Coming Soon Routes */}
             <Route
@@ -119,6 +150,24 @@ const App = () => {
                 // <ProtectedRoute requiredRole="staff">
                 // </ProtectedRoute>
                 <StaffDashboard />
+              }
+            />
+            
+            {/* Staff Form Routes */}
+            <Route
+              path="/staff/forms"
+              element={
+                // <ProtectedRoute requiredRole="staff">
+                // </ProtectedRoute>
+                <NurseForms />
+              }
+            />
+            <Route
+              path="/staff/forms/:formId"
+              element={
+                // <ProtectedRoute requiredRole="staff">
+                // </ProtectedRoute>
+                <NurseFormDetail />
               }
             />
 
