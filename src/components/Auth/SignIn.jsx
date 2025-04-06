@@ -11,7 +11,7 @@ import "./Auth.css";
  * After successful Google authentication, the user will be redirected to
  * the UserInfoForm component to complete their profile.
  */
-const SignIn = ({ authState, setAuthState }) => {
+const SignIn = () => {
   const navigate = useNavigate();
   const { loginWithGoogle, isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
@@ -30,7 +30,7 @@ const SignIn = ({ authState, setAuthState }) => {
     try {
       // Use the loginWithGoogle method from the AuthContext
       loginWithGoogle();
-
+      
       // Note: The actual redirect happens in the loginWithGoogle method,
       // so the code below won't execute until the user returns from Google auth
     } catch (err) {
@@ -43,14 +43,14 @@ const SignIn = ({ authState, setAuthState }) => {
   // If the user is already authenticated, redirect to the appropriate dashboard
   React.useEffect(() => {
     if (isAuthenticated) {
-      const userRole = localStorage.getItem("userRole");
-      if (userRole === "patient") {
-        navigate("/patient/dashboard");
-      } else if (userRole === "nurse") {
-        navigate("/staff/dashboard");
+      const userRole = localStorage.getItem('userRole');
+      if (userRole === 'patient') {
+        navigate('/patient/dashboard');
+      } else if (userRole === 'nurse') {
+        navigate('/staff/dashboard');
       } else {
         // If the user doesn't have a role yet, redirect to the user info form
-        // navigate("/complete-profile");
+        navigate('/complete-profile');
       }
     }
   }, [isAuthenticated, navigate]);
