@@ -1,9 +1,9 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import api from '../services/api';
+import React, { createContext, useState, useEffect, useContext } from "react";
+import api from "../services/api";
 
 /**
  * AuthContext
- * 
+ *
  * This context provides authentication state and methods to the entire application.
  * It handles user authentication, profile management, and session persistence.
  */
@@ -13,7 +13,7 @@ const AuthContext = createContext();
 
 /**
  * AuthProvider Component
- * 
+ *
  * This component provides authentication state and methods to its children.
  */
 export const AuthProvider = ({ children }) => {
@@ -29,27 +29,27 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       setError(null);
-      
+
       // Try to get the current user from the API
       const userData = await api.auth.getCurrentUser();
-      
+
       // If successful, update the user state
       setUser(userData);
-      
+
       // Store authentication state in localStorage
-      localStorage.setItem('isAuthenticated', 'true');
-      localStorage.setItem('userRole', userData.role);
+      localStorage.setItem("isAuthenticated", "true");
+      localStorage.setItem("userRole", userData.role);
     } catch (err) {
       // If there's an error, clear the user state
       setUser(null);
-      localStorage.removeItem('isAuthenticated');
-      localStorage.removeItem('userRole');
-      
+      localStorage.removeItem("isAuthenticated");
+      localStorage.removeItem("userRole");
+
       // Only set error if it's not a 401 (Unauthorized) error
       // 401 is expected when the user is not authenticated
       if (err.status !== 401) {
-        setError(err.message || 'Failed to authenticate user');
-        console.error('Authentication error:', err);
+        setError(err.message || "Failed to authenticate user");
+        console.error("Authentication error:", err);
       }
     } finally {
       setLoading(false);
@@ -79,17 +79,17 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       setError(null);
-      
+
       // Call the logout API
       await api.auth.logout();
-      
+
       // Clear the user state
       setUser(null);
-      localStorage.removeItem('isAuthenticated');
-      localStorage.removeItem('userRole');
+      localStorage.removeItem("isAuthenticated");
+      localStorage.removeItem("userRole");
     } catch (err) {
-      setError(err.message || 'Failed to logout');
-      console.error('Logout error:', err);
+      setError(err.message || "Failed to logout");
+      console.error("Logout error:", err);
     } finally {
       setLoading(false);
     }
@@ -97,26 +97,26 @@ export const AuthProvider = ({ children }) => {
 
   /**
    * Update the user's profile
-   * @param {Object} userData - The user data to update
+   * @param {Object} profileData - The user data to update
    */
-  const updateProfile = async (userData) => {
+  const updateProfile = async (profileData) => {
     try {
       setLoading(true);
       setError(null);
-      
+
       // Call the update profile API
-      const updatedUser = await api.users.updateProfile(userData);
-      
+      const updatedUser = await api.users.updateProfile(profileData);
+
       // Update the user state
       setUser(updatedUser);
-      
+
       // Update the role in localStorage
-      localStorage.setItem('userRole', updatedUser.role);
-      
+      localStorage.setItem("userRole", updatedUser.role);
+
       return updatedUser;
     } catch (err) {
-      setError(err.message || 'Failed to update profile');
-      console.error('Update profile error:', err);
+      setError(err.message || "Failed to update profile");
+      console.error("Profile update error:", err);
       throw err;
     } finally {
       setLoading(false);
@@ -144,12 +144,12 @@ export const AuthProvider = ({ children }) => {
  */
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  
+
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
-  
+
   return context;
 };
 
-export default AuthContext; 
+export default AuthContext;

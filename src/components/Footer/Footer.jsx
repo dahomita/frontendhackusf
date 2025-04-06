@@ -1,21 +1,21 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { 
-  FooterContainer, 
-  FooterContent, 
-  FooterSection, 
-  FooterTitle, 
-  FooterLink, 
-  FooterText, 
+import React from "react";
+import { Link } from "react-router-dom";
+import {
+  FooterContainer,
+  FooterContent,
+  FooterSection,
+  FooterTitle,
+  FooterLink,
+  FooterText,
   SocialLinks,
   FooterBottom,
   FooterNav,
-  FooterNavLink
-} from './styles';
+  FooterNavLink,
+} from "./styles";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  
+
   return (
     <FooterContainer>
       <FooterContent>
@@ -39,21 +39,21 @@ const Footer = () => {
             </a>
           </SocialLinks>
         </FooterSection>
-        
+
         <FooterSection>
           <FooterTitle>Quick Links</FooterTitle>
           <FooterNav>
             <FooterNavLink to="/">Home</FooterNavLink>
             <FooterNavLink to="/signin">Sign In</FooterNavLink>
             <FooterNavLink to="/signup">Sign Up</FooterNavLink>
-            <FooterNavLink to="/patient/dashboard">Patient Dashboard</FooterNavLink>
+            <FooterNavLink to="/patient/dashboard">
+              Patient Dashboard
+            </FooterNavLink>
             <FooterNavLink to="/staff/dashboard">Staff Dashboard</FooterNavLink>
-            <FooterNavLink to="/help">Help</FooterNavLink>
           </FooterNav>
         </FooterSection>
-        
+
         <FooterSection>
-          <FooterTitle>Contact</FooterTitle>
           <FooterText>
             <strong>Email:</strong> info@fallguardian.com
           </FooterText>
@@ -65,7 +65,7 @@ const Footer = () => {
           </FooterText>
         </FooterSection>
       </FooterContent>
-      
+
       <FooterBottom>
         <p>&copy; {currentYear} FallGuardian. All rights reserved.</p>
         <div className="footer-links">
@@ -78,4 +78,4 @@ const Footer = () => {
   );
 };
 
-export default Footer; 
+export default Footer;

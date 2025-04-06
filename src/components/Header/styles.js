@@ -3,256 +3,285 @@ import { Link } from 'react-router-dom';
 
 export const HeaderContainer = styled.header`
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding: 1rem 2rem;
-  background-color: transparent;
-  color: #97B3AE;
+  background-color: var(--surface-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 100;
-  
+  height: 64px;
+
   @media (max-width: 768px) {
     padding: 1rem;
   }
 `;
 
-export const Logo = styled.div`
-  font-size: 1.8rem;
-  font-weight: bold;
-  
-  a {
-    text-decoration: none;
-    color: white;
-    display: flex;
-    align-items: center;
+export const Logo = styled(Link)`
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-decoration: none;
+  gap: 0.5rem;
+
+  .material-icons {
+    font-size: 1.75rem;
   }
-  
-  .logo-text {
-    background: #c9e4de;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-fill-color: transparent;
+
+  &:hover {
+    color: var(--primary-dark);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
   }
 `;
 
 export const Nav = styled.nav`
   display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  
-  @media (max-width: 1024px) {
+  gap: 1rem;
+  margin: 0 1rem;
+
+  @media (max-width: 768px) {
     display: none;
   }
 `;
 
-export const NavLink = styled(Link)`
-  color: #b8e0d2;
-  text-decoration: none;
-  font-weight: 700;
-  padding: 0.5rem 0;
-  position: relative;
-  transition: color 0.3s ease;
-  font-size: 1rem;
-  
-  &:hover {
-    color: #95b8d1;
-  }
-  
-  &:after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: #95b8d1;
-    transition: width 0.3s ease;
-  }
-  
-  &:hover:after {
-    width: 100%;
-  }
-  
-  &[aria-current="page"] {
-    color: #95b8d1;
-    
-    &:after {
-      width: 100%;
-      background-color: #b8e0d2;
-    }
-  }
-  
-  &:focus-visible {
-    outline: 2px solid #c6def1;
-    outline-offset: 4px;
-    border-radius: 4px;
-  }
-`;
-
 export const NavButton = styled(Link)`
-  background-color: #c6def1;
-  color: #849ccc;
-  border: none;
-  padding: 0.5rem 1.2rem;
-  border-radius: 4px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  color: var(--text-color);
   text-decoration: none;
-  
+  font-weight: 500;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+
   &:hover {
-    background-color: #849ccc;
-    color: #c6def1;
-    transform: translateY(-2px);
+    background-color: var(--background-color);
+    color: var(--primary-color);
   }
-  
+
   &:focus-visible {
-    outline: 2px solid #849ccc;
-    outline-offset: 4px;
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+
+  &[aria-current="page"] {
+    color: var(--primary-color);
+    font-weight: 600;
   }
 `;
 
 export const MobileMenuButton = styled.button`
   display: none;
-  background: transparent;
+  background: none;
   border: none;
+  color: var(--text-color);
   cursor: pointer;
   padding: 0.5rem;
-  z-index: 101;
-  
-  @media (max-width: 1024px) {
-    display: block;
+  border-radius: 4px;
+
+  .material-icons {
+    font-size: 1.5rem;
   }
-  
-  .hamburger-icon {
-    display: block;
-    width: 24px;
-    height: 2px;
-    background-color: #809bce;
-    position: relative;
-    transition: all 0.3s ease;
-    
-    &:before, &:after {
-      content: '';
-      position: absolute;
-      width: 24px;
-      height: 2px;
-      background-color: #809bce;
-      transition: all 0.3s ease;
-    }
-    
-    &:before {
-      top: -8px;
-    }
-    
-    &:after {
-      bottom: -8px;
-    }
-  }
-  
+
   &:hover {
-    .hamburger-icon {
-      background-color: #95b8d1;
-      
-      &:before, &:after {
-        background-color: #95b8d1;
-      }
-    }
+    background-color: var(--background-color);
   }
-  
+
   &:focus-visible {
-    outline: 2px solid #809bce;
-    outline-offset: 4px;
-    border-radius: 4px;
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;
 
-export const MobileNavOverlay = styled.div`
+export const MobileNav = styled.div`
+  display: none;
   position: fixed;
-  top: 0;
+  top: 64px;
   left: 0;
   right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--surface-color);
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: ${props => props.isOpen ? 'translateY(0)' : 'translateY(-100%)'};
+  transition: transform 0.3s ease;
   z-index: 99;
-  animation: fadeIn 0.3s ease;
-  
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-`;
 
-export const MobileNav = styled.nav`
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 80%;
-  max-width: 300px;
-  height: 100vh;
-  background-color: white;
-  color: #809bce;
-  padding: 5rem 1.5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  z-index: 100;
-  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
-  animation: slideIn 0.3s ease;
-  
-  @keyframes slideIn {
-    from { transform: translateX(100%); }
-    to { transform: translateX(0); }
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 `;
 
 export const MobileNavLink = styled(Link)`
-  color: #849ccc;
+  padding: 0.75rem 1rem;
+  color: var(--text-color);
   text-decoration: none;
-  font-weight: 700;
-  font-size: 1.1rem;
-  padding: 0.5rem 0;
-  transition: color 0.3s ease;
-  
+  font-weight: 500;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+
   &:hover {
-    color: #97B3AE;
+    background-color: var(--background-color);
+    color: var(--primary-color);
   }
-  
-  &[aria-current="page"] {
-    color: #97B3AE;
-    border-left: 3px solid #97B3AE;
-    padding-left: 0.5rem;
-  }
-  
+
   &:focus-visible {
-    outline: 2px solid #849ccc;
-    outline-offset: 4px;
-    border-radius: 4px;
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+
+  &[aria-current="page"] {
+    color: var(--primary-color);
+    font-weight: 600;
   }
 `;
 
-export const MobileNavButton = styled(Link)`
-  background-color: #c6def1;
-  color: #849ccc;
+export const MobileNavButton = styled.button`
+  padding: 0.75rem 1rem;
+  color: var(--text-color);
+  background: none;
   border: none;
-  padding: 0.8rem 1.2rem;
+  font-weight: 500;
   border-radius: 4px;
-  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  text-align: center;
-  margin-top: 1rem;
-  
+  text-align: left;
+  transition: all 0.2s ease;
+
   &:hover {
-    background-color: #849ccc;
-    color: #c6def1;
+    background-color: var(--background-color);
+    color: var(--primary-color);
   }
-  
+
   &:focus-visible {
-    outline: 2px solid #849ccc;
-    outline-offset: 4px;
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+`;
+
+export const UserMenu = styled.div`
+  position: relative;
+`;
+
+export const UserMenuButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--background-color);
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  .material-icons {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+  }
+
+  &:hover {
+    background-color: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+`;
+
+export const UserName = styled.span`
+  font-weight: 500;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-color);
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+export const UserMenuDropdown = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--surface-color);
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  min-width: 220px;
+  display: ${props => props.isOpen ? 'block' : 'none'};
+  z-index: 101;
+  margin-top: 0.75rem;
+  overflow: hidden;
+  animation: fadeIn 0.2s ease;
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: 20px;
+    width: 16px;
+    height: 16px;
+    background-color: var(--surface-color);
+    transform: rotate(45deg);
+    box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.05);
+  }
+`;
+
+export const UserMenuItem = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+
+  .material-icons {
+    font-size: 1.25rem;
+    color: var(--primary-color);
+  }
+
+  &:hover {
+    background-color: var(--background-color);
+    color: var(--primary-color);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: -2px;
+  }
+
+  &:not(:last-child):after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 1rem;
+    right: 1rem;
+    height: 1px;
+    background-color: var(--border-color);
   }
 `; 

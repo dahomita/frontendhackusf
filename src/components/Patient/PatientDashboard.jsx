@@ -1,18 +1,86 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
+import { useAuth } from '../../context/AuthContext';
 import "./Patient.css";
 
 const PatientDashboard = () => {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
+  const [fallRiskLevel, setFallRiskLevel] = useState('Low');
+  const [recentIncidents, setRecentIncidents] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
 
+  useEffect(() => {
+    // Determine fall risk level based on age
+    if (user?.age) {
+      if (user.age < 40) {
+        setFallRiskLevel('Low');
+      } else if (user.age >= 40 && user.age < 65) {
+        setFallRiskLevel('Moderate');
+      } else {
+        setFallRiskLevel('High');
+      }
+    }
+
+    // Fetch recent incidents
+    const fetchIncidents = async () => {
+      try {
+        // TODO: Replace with actual API call
+        const mockIncidents = [
+          {
+            id: 1,
+            date: '2024-03-15',
+            time: '14:30',
+            location: 'Living Room',
+            severity: 'Minor',
+            status: 'Resolved'
+          }
+        ];
+        setRecentIncidents(mockIncidents);
+      } catch (error) {
+        console.error('Error fetching incidents:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchIncidents();
+  }, [user]);
+
+  const getRiskLevelColor = (level) => {
+    switch (level) {
+      case 'Low':
+        return 'var(--success-color)';
+      case 'Moderate':
+        return 'var(--warning-color)';
+      case 'High':
+        return 'var(--error-color)';
+      default:
+        return 'var(--text-color)';
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="patient-dashboard loading">
+        <div className="loading-spinner" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="patient-dashboard" role="main">
       <header className="dashboard-header">
-        <h1>Welcome, John</h1>
+        <h1>Welcome, {user?.name || 'Patient'}</h1>
+        <div className="risk-level" style={{ backgroundColor: getRiskLevelColor(fallRiskLevel) }}>
+          Fall Risk Level: {fallRiskLevel}
+        </div>
         <p className="last-login">Last login: Today at 9:30 AM</p>
       </header>
 
@@ -63,20 +131,25 @@ const PatientDashboard = () => {
           >
             <h2 id="overview-title">Health Overview</h2>
             <div className="stats-grid">
-              <div className="stat-card" role="status">
+              <div className="stat-card">
                 <h3>Fall Risk Level</h3>
-                <p className="stat-value low-risk">Low</p>
-                <p className="stat-description">Based on recent activity</p>
+                <p className="stat-value" style={{ color: getRiskLevelColor(fallRiskLevel) }}>{fallRiskLevel}</p>
+                <p className="stat-description">Based on age: {user?.age || 'N/A'} years</p>
               </div>
-              <div className="stat-card" role="status">
+              <div className="stat-card">
                 <h3>Daily Steps</h3>
                 <p className="stat-value">4,567</p>
                 <p className="stat-description">Goal: 5,000 steps</p>
               </div>
-              <div className="stat-card" role="status">
+              <div className="stat-card">
                 <h3>Next Check-in</h3>
                 <p className="stat-value">2:30 PM</p>
                 <p className="stat-description">With Nurse Sarah</p>
+              </div>
+              <div className="stat-card">
+                <h3>Emergency Contacts</h3>
+                <p className="stat-value">2 Active</p>
+                <p className="stat-description">Family & Caregiver</p>
               </div>
             </div>
           </section>

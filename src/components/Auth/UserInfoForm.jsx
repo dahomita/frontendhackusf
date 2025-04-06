@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import './Auth.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import "./Auth.css";
 
 /**
  * UserInfoForm Component
- * 
+ *
  * This component displays a form for collecting additional user information
  * after successful Google authentication. It collects:
  * - First Name
@@ -13,35 +13,35 @@ import './Auth.css';
  * - Age
  * - Phone Number
  * - Role (Patient / Nurse)
- * 
+ *
  * The form is designed with accessibility in mind for elderly users.
  */
 const UserInfoForm = () => {
   const navigate = useNavigate();
   const { user, updateProfile, isAuthenticated } = useAuth();
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    age: '',
-    phoneNumber: '',
-    role: 'patient',
+    firstName: "",
+    lastName: "",
+    age: "",
+    phoneNumber: "",
+    role: "patient",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   // Pre-fill the form with user data if available
   useEffect(() => {
     if (user) {
       // Split the name into first and last name
-      const nameParts = user.name ? user.name.split(' ') : ['', ''];
-      
-      setFormData(prev => ({
+      const nameParts = user.name ? user.name.split(" ") : ["", ""];
+
+      setFormData((prev) => ({
         ...prev,
-        firstName: nameParts[0] || '',
-        lastName: nameParts.slice(1).join(' ') || '',
-        age: user.age ? user.age.toString() : '',
-        phoneNumber: user.phoneNumber || '',
-        role: user.role || 'patient',
+        firstName: nameParts[0] || "",
+        lastName: nameParts.slice(1).join(" ") || "",
+        age: user.age ? user.age.toString() : "",
+        phoneNumber: user.phoneNumber || "",
+        role: user.role || "patient",
       }));
     }
   }, [user]);
@@ -49,27 +49,34 @@ const UserInfoForm = () => {
   // Redirect if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate('/signin');
+      navigate("/signin");
     }
   }, [isAuthenticated, navigate]);
+
+  //
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setError('');
+    setError("");
 
     try {
       // Validate form data
-      if (!formData.firstName || !formData.lastName || !formData.age || !formData.phoneNumber) {
-        throw new Error('Please fill in all required fields');
+      if (
+        !formData.firstName ||
+        !formData.lastName ||
+        !formData.age ||
+        !formData.phoneNumber
+      ) {
+        throw new Error("Please fill in all required fields");
       }
 
       // Prepare user data for the API
@@ -79,18 +86,18 @@ const UserInfoForm = () => {
         phoneNumber: formData.phoneNumber,
         role: formData.role,
       };
-      
+
       // Update the user profile
       const updatedUser = await updateProfile(userData);
-      
+
       // Redirect to the appropriate dashboard based on role
-      if (updatedUser.role === 'patient') {
-        navigate('/patient/dashboard');
-      } else if (updatedUser.role === 'nurse') {
-        navigate('/staff/dashboard');
+      if (updatedUser.role === "patient") {
+        navigate("/patient/dashboard");
+      } else if (updatedUser.role === "nurse") {
+        navigate("/staff/dashboard");
       }
     } catch (err) {
-      setError(err.message || 'Failed to update profile. Please try again.');
+      setError(err.message || "Failed to update profile. Please try again.");
       setIsSubmitting(false);
     }
   };
@@ -99,14 +106,22 @@ const UserInfoForm = () => {
     <div className="auth-container">
       <div className="auth-card">
         <h1 className="auth-title">Complete Your Profile</h1>
-        <p className="auth-subtitle">Please provide additional information to complete your account setup</p>
-        
-        {error && <div className="error-message" role="alert">{error}</div>}
-        
+        <p className="auth-subtitle">
+          Please provide additional information to complete your account setup
+        </p>
+
+        {error && (
+          <div className="error-message" role="alert">
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="firstName" className="form-label">First Name</label>
+              <label htmlFor="firstName" className="form-label">
+                First Name
+              </label>
               <input
                 type="text"
                 id="firstName"
@@ -120,9 +135,11 @@ const UserInfoForm = () => {
                 aria-label="First Name"
               />
             </div>
-            
+
             <div className="form-group">
-              <label htmlFor="lastName" className="form-label">Last Name</label>
+              <label htmlFor="lastName" className="form-label">
+                Last Name
+              </label>
               <input
                 type="text"
                 id="lastName"
@@ -137,10 +154,12 @@ const UserInfoForm = () => {
               />
             </div>
           </div>
-          
+
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="age" className="form-label">Age</label>
+              <label htmlFor="age" className="form-label">
+                Age
+              </label>
               <input
                 type="number"
                 id="age"
@@ -156,9 +175,11 @@ const UserInfoForm = () => {
                 aria-label="Age"
               />
             </div>
-            
+
             <div className="form-group">
-              <label htmlFor="phoneNumber" className="form-label">Phone Number</label>
+              <label htmlFor="phoneNumber" className="form-label">
+                Phone Number
+              </label>
               <input
                 type="tel"
                 id="phoneNumber"
@@ -173,9 +194,11 @@ const UserInfoForm = () => {
               />
             </div>
           </div>
-          
+
           <div className="form-group">
-            <label htmlFor="role" className="form-label">I am a:</label>
+            <label htmlFor="role" className="form-label">
+              I am a:
+            </label>
             <div className="role-selector">
               <div className="role-option">
                 <input
@@ -183,7 +206,7 @@ const UserInfoForm = () => {
                   id="patient"
                   name="role"
                   value="patient"
-                  checked={formData.role === 'patient'}
+                  checked={formData.role === "patient"}
                   onChange={handleChange}
                   aria-label="Patient"
                 />
@@ -192,14 +215,14 @@ const UserInfoForm = () => {
                   <span>Patient</span>
                 </label>
               </div>
-              
+
               <div className="role-option">
                 <input
                   type="radio"
                   id="nurse"
                   name="role"
                   value="nurse"
-                  checked={formData.role === 'nurse'}
+                  checked={formData.role === "nurse"}
                   onChange={handleChange}
                   aria-label="Nurse"
                 />
@@ -210,10 +233,10 @@ const UserInfoForm = () => {
               </div>
             </div>
           </div>
-          
-          <button 
-            type="submit" 
-            className="submit-button" 
+
+          <button
+            type="submit"
+            className="submit-button"
             disabled={isSubmitting}
             aria-label={isSubmitting ? "Submitting..." : "Complete Profile"}
           >
@@ -225,4 +248,4 @@ const UserInfoForm = () => {
   );
 };
 
-export default UserInfoForm; 
+export default UserInfoForm;
