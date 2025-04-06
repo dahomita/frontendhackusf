@@ -52,7 +52,7 @@ const App = () => {
 
 // Separate component to use auth context inside Router
 const AppContent = () => {
-  const { isAuthenticated, user } = useAuth();
+  const { user } = useAuth();
   
   return (
     <div className="App">
@@ -112,6 +112,12 @@ const AppContent = () => {
           <Route
             path="/staff/dashboard"
             element={<StaffDashboard />}
+          />
+          
+          {/* Staff Skin Detection Route */}
+          <Route
+            path="/staff/skindetect"
+            element={<StaffDashboard defaultTab="skinDetect" />}
           />
           
           {/* Staff Form Routes */}
