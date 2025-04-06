@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Staff.css';
+import Card from '../Common/Card';
+import Button from '../Common/Button';
+import LoadingSpinner from '../Common/LoadingSpinner';
 
 const StaffDashboard = () => {
   const navigate = useNavigate();
@@ -10,6 +13,13 @@ const StaffDashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
+  // Cancer detection states
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [detectionResult, setDetectionResult] = useState(null);
+  const [isDetecting, setIsDetecting] = useState(false);
+  const fileInputRef = useRef(null);
+  
   const [activeIncidents, setActiveIncidents] = useState([
     {
       id: 1,
@@ -175,6 +185,11 @@ const StaffDashboard = () => {
       fetchPatients();
     } else if (tab === 'myPatients') {
       fetchMyPatients();
+    } else if (tab === 'cancerDetection') {
+      // Reset the detection states when switching to this tab
+      setImage(null);
+      setImagePreview(null);
+      setDetectionResult(null);
     }
   };
 
@@ -191,6 +206,148 @@ const StaffDashboard = () => {
       fetchMyPatients();
     }
   }, []);
+
+  // Handle image selection
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    // Check file is an image
+    if (!file.type.match('image.*')) {
+      setError('Please select an image file (jpg, png, etc)');
+      return;
+    }
+    
+    // Check file size (limit to 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Image size should be less than 5MB');
+      return;
+    }
+    
+    setImage(file);
+    setError(null);
+    setDetectionResult(null);
+    
+    // Create preview
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Handle drag and drop
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+  
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0];
+      
+      // Check file is an image
+      if (!file.type.match('image.*')) {
+        setError('Please select an image file (jpg, png, etc)');
+        return;
+      }
+      
+      // Check file size (limit to 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setError('Image size should be less than 5MB');
+        return;
+      }
+      
+      setImage(file);
+      setError(null);
+      setDetectionResult(null);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Submit image for cancer detection
+  const handleDetection = async () => {
+    if (!image) {
+      setError('Please select an image first');
+      return;
+    }
+    
+    setIsDetecting(true);
+    setError(null);
+    
+    try {
+      const formData = new FormData();
+      formData.append('image', image);
+      
+      const response = await fetch(`${process.env.API_BASE_URL}/cancer-detection`, {
+        method: 'POST',
+        body: formData,
+        credentials: 'include',
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to analyze image');
+      }
+      
+      const data = await response.json();
+      setDetectionResult(data);
+    } catch (err) {
+      console.error('Error during cancer detection:', err);
+      setError(err.message || 'Failed to analyze image. Please try again.');
+    } finally {
+      setIsDetecting(false);
+    }
+  };
+
+  // Clear the current image and results
+  const handleClearImage = () => {
+    setImage(null);
+    setImagePreview(null);
+    setDetectionResult(null);
+    setError(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  // Function to generate report from detection result
+  const handleGenerateReport = () => {
+    if (!detectionResult) return;
+    
+    // Create a simple report as a string
+    const reportContent = `
+      Skin Cancer Detection Report
+      Date: ${new Date().toLocaleString()}
+      
+      Result: ${detectionResult.result === 'cancer' ? 'Potential Melanoma' : 'Benign Lesion'}
+      Probability: ${(detectionResult.probability * 100).toFixed(2)}%
+      
+      Notes: ${detectionResult.result === 'cancer' 
+        ? 'Potential melanoma detected. Further dermatological examination recommended.' 
+        : 'No melanoma detected. Regular dermatological check-ups recommended.'}
+    `;
+    
+    // Create a blob and download it
+    const blob = new Blob([reportContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `skin-cancer-detection-report-${Date.now()}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="staff-dashboard" role="main">
@@ -239,6 +396,14 @@ const StaffDashboard = () => {
           role="tab"
         >
           Patient Messages
+        </button>
+        <button
+          className={`nav-button ${activeTab === 'cancerDetection' ? 'active' : ''}`}
+          onClick={() => handleTabChange('cancerDetection')}
+          aria-selected={activeTab === 'cancerDetection'}
+          role="tab"
+        >
+          Skin Cancer Detection
         </button>
         <button
           className={`nav-button ${activeTab === 'reports' ? 'active' : ''}`}
@@ -440,6 +605,139 @@ const StaffDashboard = () => {
           </section>
         )}
 
+        {activeTab === 'cancerDetection' && (
+          <section className="cancer-detection-section" aria-labelledby="cancer-detection-title">
+            <h2 id="cancer-detection-title">Skin Cancer Detection</h2>
+            
+            <div className="cancer-detection-container">
+              <Card elevation="medium" bordered={true} className="upload-card">
+                <Card.Header title="Skin Lesion Analysis" />
+                <Card.Content>
+                  <p className="detection-description">
+                    Upload a dermatoscopic image of a skin lesion for melanoma detection analysis. The system will analyze the image and provide a probability assessment based on visual characteristics of the lesion.
+                  </p>
+                  
+                  {error && (
+                    <div className="error-message" role="alert">
+                      {error}
+                    </div>
+                  )}
+                  
+                  {!imagePreview ? (
+                    <div 
+                      className="upload-area"
+                      onDragOver={handleDragOver}
+                      onDrop={handleDrop}
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      <div className="upload-icon">📁</div>
+                      <p>Drag and drop an image here, or click to select</p>
+                      <input 
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleImageChange}
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                      />
+                      <Button 
+                        variant="primary"
+                        size="medium"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          fileInputRef.current?.click();
+                        }}
+                      >
+                        Select Image
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="image-preview-container">
+                      <img 
+                        src={imagePreview} 
+                        alt="Selected medical image" 
+                        className="selected-image"
+                      />
+                      <div className="preview-actions">
+                        <Button 
+                          variant="secondary"
+                          onClick={handleClearImage}
+                        >
+                          Clear
+                        </Button>
+                        <Button 
+                          variant="primary"
+                          onClick={handleDetection}
+                          loading={isDetecting}
+                          disabled={isDetecting}
+                        >
+                          Analyze Image
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </Card.Content>
+              </Card>
+              
+              {isDetecting && (
+                <div className="detection-loading">
+                  <LoadingSpinner size="large" text="Analyzing image..." fullHeight={true} />
+                </div>
+              )}
+              
+              {detectionResult && !isDetecting && (
+                <Card elevation="medium" bordered={true} className="result-card">
+                  <Card.Header title="Detection Results" />
+                  <Card.Content>
+                    <div className={`result-status ${detectionResult.result === 'cancer' ? 'result-positive' : 'result-negative'}`}>
+                      <div className="result-icon">
+                        {detectionResult.result === 'cancer' ? '⚠️' : '✓'}
+                      </div>
+                      <h3 className="result-title">
+                        {detectionResult.result === 'cancer' ? 'Potential Melanoma Detected' : 'No Melanoma Detected'}
+                      </h3>
+                    </div>
+                    
+                    <div className="probability-container">
+                      <p className="probability-label">Probability Assessment:</p>
+                      <div className="probability-bar-container">
+                        <div 
+                          className={`probability-bar ${detectionResult.result === 'cancer' ? 'probability-cancer' : 'probability-normal'}`}
+                          style={{ width: `${detectionResult.probability * 100}%` }}
+                        ></div>
+                      </div>
+                      <p className="probability-value">{(detectionResult.probability * 100).toFixed(2)}%</p>
+                    </div>
+                    
+                    <div className="result-interpretation">
+                      <h4>Interpretation:</h4>
+                      <p>
+                        {detectionResult.result === 'cancer' 
+                          ? 'The analysis indicates characteristics consistent with melanoma or other skin cancers. Further dermatological examination and possibly a biopsy are recommended.' 
+                          : 'The analysis indicates characteristics of a benign skin lesion. Regular dermatological check-ups are still recommended as part of routine skin care.'}
+                      </p>
+                    </div>
+                    
+                    <div className="result-actions">
+                      <Button 
+                        variant="outline"
+                        onClick={() => handleClearImage()}
+                      >
+                        New Analysis
+                      </Button>
+                      <Button
+                        variant="primary"
+                        onClick={handleGenerateReport}
+                      >
+                        Generate Report
+                      </Button>
+                    </div>
+                  </Card.Content>
+                </Card>
+              )}
+            </div>
+          </section>
+        )}
+
         {activeTab === 'reports' && (
           <section className="reports-section" aria-labelledby="reports-title">
             <h2 id="reports-title">Reports</h2>
@@ -480,6 +778,14 @@ const StaffDashboard = () => {
         >
           <span className="action-icon">✉️</span>
           Patient Messages
+        </button>
+        <button 
+          className="action-button" 
+          aria-label="Skin cancer detection"
+          onClick={() => handleTabChange('cancerDetection')}
+        >
+          <span className="action-icon">🔬</span>
+          Skin Cancer Detection
         </button>
         <button className="action-button" aria-label="View alerts">
           <span className="action-icon">🔔</span>
