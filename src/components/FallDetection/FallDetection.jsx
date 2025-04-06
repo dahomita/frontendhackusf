@@ -293,8 +293,10 @@ const FallDetection = ({ nurseName, nurseMessage }) => {
       setCameraStatus("⚠️ FALL DETECTED! Notifying nurse...");
       
       try {
-        // Call the real API endpoint
-        const response = await fetch(`${process.env.API_BASE_URL}/patient/me/fall`, {
+        const API_BASE_URL = process.env.API_BASE_URL || "https://fallguardian-api.azurewebsites.net/api";
+        
+        // Call the API endpoint with hardcoded patient ID
+        const response = await fetch(`${API_BASE_URL}/patient/67f296d63f00f2de5138ba5f/fall`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include', // Include cookies for authentication

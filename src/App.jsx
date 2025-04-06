@@ -63,130 +63,76 @@ const AppContent = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/signin" element={<LoginForm />} />
           <Route path="/signup" element={<RegisterForm />} />
-          <Route path="/complete-profile" element={
-            <ProtectedRoute>
-              <UserInfoForm />
-            </ProtectedRoute>
-          } />
+          <Route path="/complete-profile" element={<UserInfoForm />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
 
           {/* Patient Routes */}
           <Route
             path="/patient/dashboard"
-            element={
-              <ProtectedRoute requiredRole="patient">
-                <PatientDashboard />
-              </ProtectedRoute>
-            }
+            element={<PatientDashboard />}
           />
           <Route
             path="/patient/monitor"
-            element={
-              <ProtectedRoute requiredRole="patient">
-                <FallDetection />
-              </ProtectedRoute>
-            }
+            element={<FallDetection />}
           />
           <Route
             path="/patient/chat"
-            element={
-              <ProtectedRoute requiredRole="patient">
-                <ChatPage />
-              </ProtectedRoute>
-            }
+            element={<ChatPage />}
           />
           
           {/* Patient Form Routes */}
           <Route
             path="/patient/forms"
-            element={
-              <ProtectedRoute requiredRole="patient">
-                <FormsPage />
-              </ProtectedRoute>
-            }
+            element={<FormsPage />}
           />
           <Route
             path="/patient/forms/new"
-            element={
-              <ProtectedRoute requiredRole="patient">
-                <NewForm />
-              </ProtectedRoute>
-            }
+            element={<NewForm />}
           />
           <Route
             path="/patient/forms/:formId"
-            element={
-              <ProtectedRoute requiredRole="patient">
-                <FormDetail />
-              </ProtectedRoute>
-            }
+            element={<FormDetail />}
           />
 
           {/* Coming Soon Routes */}
           <Route
             path="/patient/voice"
-            element={
-              <ProtectedRoute requiredRole="patient">
-                <ComingSoon feature="voice" />
-              </ProtectedRoute>
-            }
+            element={<ComingSoon feature="voice" />}
           />
           <Route
             path="/patient/contacts"
-            element={
-              <ProtectedRoute requiredRole="patient">
-                <ComingSoon feature="contacts" />
-              </ProtectedRoute>
-            }
+            element={<ComingSoon feature="contacts" />}
           />
           <Route
             path="/patient/medications"
-            element={
-              <ProtectedRoute requiredRole="patient">
-                <ComingSoon feature="medications" />
-              </ProtectedRoute>
-            }
+            element={<ComingSoon feature="medications" />}
           />
 
           {/* Staff Routes */}
           <Route
             path="/staff/dashboard"
-            element={
-              <ProtectedRoute requiredRole="staff">
-                <StaffDashboard />
-              </ProtectedRoute>
-            }
+            element={<StaffDashboard />}
           />
           
           {/* Staff Form Routes */}
           <Route
             path="/staff/forms"
-            element={
-              <ProtectedRoute requiredRole="staff">
-                <NurseForms />
-              </ProtectedRoute>
-            }
+            element={<NurseForms />}
           />
           <Route
             path="/staff/forms/:formId"
-            element={
-              <ProtectedRoute requiredRole="staff">
-                <NurseFormDetail />
-              </ProtectedRoute>
-            }
+            element={<NurseFormDetail />}
           />
 
           {/* Dashboard Route - redirects based on user role */}
           <Route 
             path="/dashboard" 
             element={
-              <ProtectedRoute>
-                {user?.role === 'staff' ? (
-                  <Navigate to="/staff/dashboard" replace />
-                ) : (
-                  <Navigate to="/patient/dashboard" replace />
-                )}
-              </ProtectedRoute>
+              user?.role === 'staff' ? (
+                <Navigate to="/staff/dashboard" replace />
+              ) : (
+                <Navigate to="/patient/dashboard" replace />
+              )
             } 
           />
 
