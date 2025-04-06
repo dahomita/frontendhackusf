@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const ChatContainer = styled.div`
   display: flex;
@@ -72,11 +72,11 @@ export const Message = styled.div`
   flex-direction: column;
   max-width: 70%;
   
-  &.nurse {
+  &.nurse, &.assistant {
     align-self: flex-start;
   }
   
-  &.patient {
+  &.patient, &.user {
     align-self: flex-end;
   }
 `;
@@ -86,12 +86,12 @@ export const MessageContent = styled.div`
   border-radius: 18px;
   margin-bottom: 0.3rem;
   
-  ${Message}.nurse & {
+  ${Message}.nurse &, ${Message}.assistant & {
     background-color: white;
     border-bottom-left-radius: 4px;
   }
   
-  ${Message}.patient & {
+  ${Message}.patient &, ${Message}.user & {
     background-color: #4CAF50;
     color: white;
     border-bottom-right-radius: 4px;
@@ -137,5 +137,94 @@ export const SendButton = styled.button`
   
   &:hover {
     background-color: #388E3C;
+  }
+  
+  &:disabled {
+    background-color: #a5d6a7;
+    cursor: not-allowed;
+  }
+`;
+
+// Animation for the typing indicator
+const bounce = keyframes`
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+`;
+
+export const TypingIndicator = styled.div`
+  display: flex;
+  padding: 0.8rem 1rem;
+  background-color: white;
+  border-radius: 18px;
+  border-bottom-left-radius: 4px;
+  width: fit-content;
+  
+  span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #999;
+    border-radius: 50%;
+    margin: 0 2px;
+    animation: ${bounce} 1s infinite;
+    
+    &:nth-child(1) {
+      animation-delay: 0s;
+    }
+    
+    &:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    &:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+  }
+`;
+
+export const ImageContainer = styled.div`
+  margin-top: 1rem;
+  max-width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+`;
+
+export const GeneratedImage = styled.img`
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+`;
+
+export const ActionButtons = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem;
+  background-color: white;
+  border-top: 1px solid #eee;
+`;
+
+export const ActionButton = styled.button`
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 0 0.5rem;
+  
+  &:hover {
+    background-color: #e0e0e0;
+  }
+  
+  &.active {
+    background-color: #4CAF50;
+    color: white;
   }
 `; 
