@@ -22,6 +22,7 @@ import PatientDashboard from "./components/Patient/PatientDashboard";
 import FallDetection from "./components/FallDetection/FallDetection";
 import ChatPage from "./components/ChatPage/ChatPage";
 import ComingSoon from "./components/ComingSoon/ComingSoon";
+import SkinDetect from "./components/SkinDetect/SkinDetect";
 
 // Staff Components
 import StaffDashboard from "./components/Staff/StaffDashboard";
@@ -160,6 +161,10 @@ const App = () => {
                   <ChatPage />
                 </ProtectedRoute>
               }
+            />
+            <Route
+              path="/patient/skindetect"
+              element={<SkinDetect />}
             />
 
             {/* Coming Soon Routes */}
