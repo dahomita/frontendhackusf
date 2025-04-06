@@ -6,9 +6,9 @@ const About = () => {
   return (
     <div className="about-container">
       <div className="about-header">
-        <h1>About FallGuardian</h1>
+        <h1>About SafeGuard</h1>
         <p className="about-subtitle">
-          Protecting and connecting our elderly community
+          Protecting elderly health through fall detection, skin monitoring, and therapeutic AI
         </p>
       </div>
 
@@ -17,9 +17,10 @@ const About = () => {
           <div className="section-content">
             <h2>Our Mission</h2>
             <p>
-              FallGuardian is dedicated to enhancing the safety, health, and
-              well-being of elderly residents in nursing homes through
-              innovative AI-powered monitoring and companionship solutions.
+              SafeGuard is dedicated to enhancing the safety, health, and
+              well-being of elderly residents through our three-pillar approach:
+              AI-powered fall detection, skin condition monitoring, and therapeutic
+              companionship solutions.
             </p>
             <p>
               We believe that every senior deserves to live with dignity,
@@ -65,41 +66,40 @@ const About = () => {
           <div className="section-content">
             <h2>Our Solution</h2>
             <p>
-              FallGuardian combines advanced AI technology with compassionate
-              care to address both the safety and social needs of elderly
-              residents:
+              SafeGuard combines advanced AI technology with compassionate
+              care to address elderly needs through:
             </p>
             <div className="feature-grid">
               <div className="feature-card">
                 <span className="material-icons">sensors</span>
-                <h3>Automatic Fall Detection</h3>
+                <h3>Fall Detection System</h3>
                 <p>
                   AI-powered monitoring system that automatically detects falls
-                  and alerts staff immediately
+                  and alerts caregivers immediately for rapid response
                 </p>
               </div>
               <div className="feature-card">
-                <span className="material-icons">emergency</span>
-                <h3>Emergency Communication</h3>
+                <span className="material-icons">healing</span>
+                <h3>Skin Condition Monitoring</h3>
                 <p>
-                  One-touch assistance for medical emergencies, symptoms, or
-                  daily help requests
+                  Early detection and tracking of skin issues including pressure ulcers,
+                  rashes, and infections through AI image analysis
                 </p>
               </div>
               <div className="feature-card">
-                <span className="material-icons">chat</span>
-                <h3>AI Companion</h3>
+                <span className="material-icons">psychology</span>
+                <h3>AI Therapeutic Companion</h3>
                 <p>
-                  Interactive AI that provides conversation, answers questions,
-                  and offers companionship
+                  Interactive AI that provides therapeutic conversations, emotional support,
+                  and cognitive exercises to maintain mental health
                 </p>
               </div>
               <div className="feature-card">
-                <span className="material-icons">groups</span>
-                <h3>Social Connection</h3>
+                <span className="material-icons">integration_instructions</span>
+                <h3>Integrated Care Platform</h3>
                 <p>
-                  Virtual social hub connecting residents to reduce isolation
-                  and foster community
+                  Unified system providing comprehensive health monitoring and support
+                  for elderly individuals and their caregivers
                 </p>
               </div>
             </div>
@@ -114,9 +114,9 @@ const About = () => {
         <section className="about-section team-section">
           <h2>Our Team</h2>
           <p>
-            FallGuardian was developed by a team of healthcare professionals,
-            technologists, and caregivers who understand the unique challenges
-            faced by elderly residents and their families.
+            SafeGuard was developed by a team of healthcare professionals,
+            technologists, dermatologists, and mental health specialists who understand
+            the unique challenges faced by elderly residents and their families.
           </p>
           <div className="team-grid">
             <div className="team-card">
@@ -154,9 +154,9 @@ const About = () => {
           <div className="cta-content">
             <h2>Join Us in Making a Difference</h2>
             <p>
-              FallGuardian is more than just a monitoring system—it's a
-              comprehensive solution that enhances the safety, health, and
-              happiness of elderly residents.
+              SafeGuard is more than just a monitoring system—it's a
+              comprehensive solution that enhances the safety, skin health, and
+              mental well-being of elderly residents through our innovative three-pillar approach.
             </p>
             <div className="cta-buttons">
               <Link to="/features" className="primary-button">

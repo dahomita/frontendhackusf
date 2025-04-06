@@ -11,7 +11,7 @@ import "./Auth.css";
  * After successful Google authentication, the user will be redirected to
  * the UserInfoForm component to complete their profile.
  */
-const SignIn = ({ authState, setAuthState }) => {
+const SignIn = () => {
   const navigate = useNavigate();
   const { loginWithGoogle, isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
@@ -58,8 +58,8 @@ const SignIn = ({ authState, setAuthState }) => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h1 className="auth-title">Welcome to FallGuardian</h1>
-        <p className="auth-subtitle">Sign in to access your account</p>
+        <h1 className="auth-title">Welcome to SafeGuard</h1>
+        <p className="auth-subtitle">Sign in to access fall detection, skin monitoring, and AI therapeutic support</p>
 
         {error && (
           <div className="error-message" role="alert">

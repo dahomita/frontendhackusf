@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   FooterContainer,
   FooterContent,
@@ -10,19 +10,20 @@ import {
   SocialLinks,
   FooterBottom,
   FooterNav,
-  FooterNavLink,
-} from "./styles";
+  FooterNavLink
+} from './styles';
+
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-
+ 
   return (
     <FooterContainer>
       <FooterContent>
         <FooterSection>
-          <FooterTitle>FallGuardian</FooterTitle>
+          <FooterTitle>SafeGuard</FooterTitle>
           <FooterText>
-            Advanced fall detection technology for the elderly and vulnerable.
+            AI-powered fall detection, skin condition monitoring, and therapeutic companion for the elderly.
           </FooterText>
           <SocialLinks>
             <a href="#" aria-label="Facebook">
@@ -39,23 +40,23 @@ const Footer = () => {
             </a>
           </SocialLinks>
         </FooterSection>
-
+       
         <FooterSection>
           <FooterTitle>Quick Links</FooterTitle>
           <FooterNav>
             <FooterNavLink to="/">Home</FooterNavLink>
             <FooterNavLink to="/signin">Sign In</FooterNavLink>
             <FooterNavLink to="/signup">Sign Up</FooterNavLink>
-            <FooterNavLink to="/patient/dashboard">
-              Patient Dashboard
-            </FooterNavLink>
+            <FooterNavLink to="/patient/dashboard">Patient Dashboard</FooterNavLink>
             <FooterNavLink to="/staff/dashboard">Staff Dashboard</FooterNavLink>
+            <FooterNavLink to="/help">Help</FooterNavLink>
           </FooterNav>
         </FooterSection>
-
+       
         <FooterSection>
+          <FooterTitle>Contact</FooterTitle>
           <FooterText>
-            <strong>Email:</strong> info@fallguardian.com
+            <strong>Email:</strong> info@safeguard.com
           </FooterText>
           <FooterText>
             <strong>Phone:</strong> (555) 123-4567
@@ -65,9 +66,9 @@ const Footer = () => {
           </FooterText>
         </FooterSection>
       </FooterContent>
-
+     
       <FooterBottom>
-        <p>&copy; {currentYear} FallGuardian. All rights reserved.</p>
+        <p>&copy; {currentYear} SafeGuard. All rights reserved.</p>
         <div className="footer-links">
           <Link to="/privacy">Privacy Policy</Link>
           <Link to="/terms">Terms of Service</Link>
@@ -77,5 +78,6 @@ const Footer = () => {
     </FooterContainer>
   );
 };
+
 
 export default Footer;

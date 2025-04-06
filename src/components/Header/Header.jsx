@@ -79,8 +79,8 @@ const Header = ({ authState, setAuthState }) => {
   return (
     <HeaderContainer>
       <Logo>
-        <Link to="/" aria-label="FallGuardian Home">
-          <span className="logo-text">FallGuardian</span>
+        <Link to="/" aria-label="SafeGuard Home">
+          <span className="logo-text">SafeGuard</span>
         </Link>
       </Logo>
 

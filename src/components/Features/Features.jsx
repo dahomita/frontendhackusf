@@ -9,7 +9,7 @@ const Features = () => {
     <div className="features-container">
       <div className="features-header">
         <h1>Features</h1>
-        <p className="features-subtitle">Discover how FallGuardian enhances safety and connection for elderly residents</p>
+        <p className="features-subtitle">Discover how SafeGuard combines fall detection, skin condition monitoring, and AI therapeutic companionship for elderly care</p>
       </div>
 
       <div className="features-tabs">
@@ -33,8 +33,8 @@ const Features = () => {
         <div className="features-content">
           <section className="feature-section">
             <div className="feature-header">
-              <span className="material-icons">dashboard</span>
-              <h2>Home Dashboard</h2>
+              <span className="material-icons">sensors</span>
+              <h2>Advanced Fall Detection</h2>
             </div>
             <div className="feature-details">
               <div className="feature-image">
@@ -44,24 +44,24 @@ const Features = () => {
               </div>
               <div className="feature-description">
                 <p>
-                  The resident dashboard provides a clean, accessible interface designed specifically for elderly users:
+                  Our AI-powered fall detection system provides reliable protection for elderly individuals:
                 </p>
                 <ul className="feature-list">
                   <li>
-                    <span className="material-icons">contrast</span>
-                    <span>High-contrast navigation tiles for easy visibility</span>
+                    <span className="material-icons">computer_vision</span>
+                    <span>Computer vision technology that detects falls with high accuracy</span>
                   </li>
                   <li>
                     <span className="material-icons">emergency</span>
-                    <span>Emergency button always visible in the corner</span>
+                    <span>Immediate alerts sent to caregivers and emergency contacts</span>
                   </li>
                   <li>
-                    <span className="material-icons">wifi_tethering</span>
-                    <span>Status indicators showing connection to monitoring system</span>
+                    <span className="material-icons">location_on</span>
+                    <span>Location tracking for rapid response during emergencies</span>
                   </li>
                   <li>
-                    <span className="material-icons">accessibility</span>
-                    <span>Accessibility features including voice control and font size adjustment</span>
+                    <span className="material-icons">history</span>
+                    <span>Fall history analytics to identify patterns and prevent future incidents</span>
                   </li>
                 </ul>
               </div>
@@ -70,36 +70,36 @@ const Features = () => {
 
           <section className="feature-section">
             <div className="feature-header">
-              <span className="material-icons">help</span>
-              <h2>Help Request Center</h2>
+              <span className="material-icons">healing</span>
+              <h2>Skin Condition Monitoring</h2>
             </div>
             <div className="feature-details">
               <div className="feature-description">
                 <p>
-                  The Help Request Center provides multiple ways for residents to request assistance:
+                  Our innovative skin condition monitoring system helps detect and manage various skin issues:
                 </p>
                 <ul className="feature-list">
                   <li>
-                    <span className="material-icons">emergency</span>
-                    <span>One-touch emergency assistance button for immediate help</span>
+                    <span className="material-icons">camera_alt</span>
+                    <span>AI-powered image analysis to detect skin abnormalities</span>
                   </li>
                   <li>
                     <span className="material-icons">medical_services</span>
-                    <span>Structured symptom reporting with visual aids</span>
+                    <span>Early detection of potential pressure ulcers, rashes, and infections</span>
                   </li>
                   <li>
-                    <span className="material-icons">category</span>
-                    <span>Categorized help requests (medical, personal care, general assistance)</span>
+                    <span className="material-icons">timeline</span>
+                    <span>Progression tracking of skin conditions over time</span>
                   </li>
                   <li>
-                    <span className="material-icons">history</span>
-                    <span>Request status tracking and history</span>
+                    <span className="material-icons">notifications</span>
+                    <span>Alerts for changes requiring medical attention</span>
                   </li>
                 </ul>
               </div>
               <div className="feature-image">
                 <div className="image-placeholder help-image">
-                  <span className="material-icons">help</span>
+                  <span className="material-icons">healing</span>
                 </div>
               </div>
             </div>
@@ -107,8 +107,8 @@ const Features = () => {
 
           <section className="feature-section">
             <div className="feature-header">
-              <span className="material-icons">chat</span>
-              <h2>AI Companion</h2>
+              <span className="material-icons">psychology</span>
+              <h2>AI Therapeutic Companion</h2>
             </div>
             <div className="feature-details">
               <div className="feature-image">
@@ -118,24 +118,24 @@ const Features = () => {
               </div>
               <div className="feature-description">
                 <p>
-                  Our AI companion provides conversation, assistance, and companionship:
+                  Our AI therapeutic companion provides emotional support and mental stimulation:
                 </p>
                 <ul className="feature-list">
                   <li>
                     <span className="material-icons">record_voice_over</span>
-                    <span>Voice-activated commands for easy interaction</span>
+                    <span>Therapeutic conversations for emotional well-being</span>
                   </li>
                   <li>
-                    <span className="material-icons">chat</span>
-                    <span>Natural conversation on various topics</span>
-                  </li>
-                  <li>
-                    <span className="material-icons">help_outline</span>
-                    <span>Answers questions about health, activities, and facility information</span>
+                    <span className="material-icons">sentiment_satisfied</span>
+                    <span>Mood tracking and depression screening</span>
                   </li>
                   <li>
                     <span className="material-icons">psychology</span>
-                    <span>Emotional support and companionship</span>
+                    <span>Cognitive exercises and memory strengthening activities</span>
+                  </li>
+                  <li>
+                    <span className="material-icons">contact_support</span>
+                    <span>24/7 support for loneliness and anxiety reduction</span>
                   </li>
                 </ul>
               </div>
@@ -374,8 +374,7 @@ const Features = () => {
         <div className="cta-content">
           <h2>Ready to Enhance Resident Safety and Well-being?</h2>
           <p>
-            FallGuardian provides a comprehensive solution for monitoring, safety, and social connection 
-            for elderly residents in nursing homes.
+            SafeGuard provides a comprehensive solution for elderly care through fall detection, skin condition monitoring, and AI therapeutic companionship.
           </p>
           <div className="cta-buttons">
             <Link to="/contact" className="primary-button">

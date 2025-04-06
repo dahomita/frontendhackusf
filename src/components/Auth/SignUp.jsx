@@ -60,7 +60,7 @@ const SignUp = () => {
       <div className="auth-card">
         <h1 className="auth-title">Create Your Account</h1>
         <p className="auth-subtitle">
-          Join FallGuardian for enhanced safety and care
+          Join SafeGuard for AI-powered fall detection, skin monitoring, and therapeutic companion
         </p>
 
         {error && (
